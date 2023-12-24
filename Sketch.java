@@ -3,6 +3,11 @@ import processing.core.PApplet;
 import processing.core.PImage;
 
 public class Sketch extends PApplet {
+  PImage imgBackground;
+
+  PImage imgScytheRestRight;
+  PImage imgScytheRestLeft;
+
 	PImage imgStandRight;
   PImage imgWalkRight1;
   PImage imgWalkRight2;
@@ -13,7 +18,7 @@ public class Sketch extends PApplet {
 
   int intCharX = 50;
   int intCharY = 500;
-  int intSpeedX = 8;
+  int intSpeedX = 15;
   int intSpeedY = 40;
 
   boolean blnRight = false;
@@ -33,6 +38,14 @@ public class Sketch extends PApplet {
   }
 
   public void setup() {
+    imgBackground = loadImage("background.png");
+
+    imgScytheRestRight = loadImage("scythe rest right.png");
+    imgScytheRestRight.resize(200, 200);
+
+    imgScytheRestLeft = loadImage("scythe rest left.png");
+    imgScytheRestLeft.resize(200, 200);
+
     imgStandRight = loadImage("stand right.png");
     imgStandRight.resize(200, 200);
 
@@ -67,11 +80,12 @@ public class Sketch extends PApplet {
   }
 
   public void draw() {
-    background(210, 255, 173);
+    image(imgBackground, 0, 0);
 
     if(blnRight && intCharX <= 1350){
       intFrame++;
       intFrame %= imgRightWalking.length;
+      image(imgScytheRestRight, intCharX - 80, intCharY);
       image(imgRightWalking[intFrame], intCharX, intCharY);
       intCharX += intSpeedX;
 
@@ -81,6 +95,7 @@ public class Sketch extends PApplet {
     else if(blnLeft && intCharX >= -50){
       intFrame++;
       intFrame %= imgRightWalking.length;
+      image(imgScytheRestLeft, intCharX + 80, intCharY);
       image(imgLeftWalking[intFrame], intCharX, intCharY);
       intCharX -= intSpeedX;
 
@@ -101,12 +116,15 @@ public class Sketch extends PApplet {
 
     else{
       if(charKeys.get(charKeys.size() - 1) == 'd'){
-        image(imgStandRight, intCharX, intCharY);
+        image(imgScytheRestRight, intCharX - 80, intCharY);
+        image(imgStandRight, intCharX, intCharY); 
       }
       
       else if(charKeys.get(charKeys.size() - 1) == 'a'){
+        image(imgScytheRestLeft, intCharX + 80, intCharY);
         image(imgStandLeft, intCharX, intCharY);
       }
+
     }
   }
 
