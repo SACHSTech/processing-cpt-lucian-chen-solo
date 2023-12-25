@@ -8,6 +8,24 @@ public class Sketch extends PApplet {
   PImage imgScytheRestRight;
   PImage imgScytheRestLeft;
 
+  PImage imgScytheAR1;
+  PImage imgScytheAR2;
+  PImage imgScytheAR3;
+  PImage imgScytheAR4;
+  PImage imgScytheAR5;
+  PImage imgScytheAR6;
+  PImage imgScytheAR7;
+  PImage imgScytheAR8;
+
+  PImage imgScytheAL1;
+  PImage imgScytheAL2;
+  PImage imgScytheAL3;
+  PImage imgScytheAL4;
+  PImage imgScytheAL5;
+  PImage imgScytheAL6;
+  PImage imgScytheAL7;
+  PImage imgScytheAL8;
+
 	PImage imgStandRight;
   PImage imgWalkRight1;
   PImage imgWalkRight2;
@@ -25,8 +43,13 @@ public class Sketch extends PApplet {
   boolean blnLeft = false;
   boolean blnJump = false;
 
+  boolean blnAtk = false;
+
   PImage[] imgRightWalking = new PImage[4];
   PImage[] imgLeftWalking = new PImage[4];
+  PImage[] imgRightAttack = new PImage[9];
+  PImage[] imgLeftAttack = new PImage[9];
+
   int intFrame = 0;
 
   ArrayList<Character> charKeys = new ArrayList<Character>();
@@ -45,6 +68,55 @@ public class Sketch extends PApplet {
 
     imgScytheRestLeft = loadImage("scythe rest left.png");
     imgScytheRestLeft.resize(200, 200);
+
+    imgScytheAR1 = loadImage("scythe attack 1r.png");
+    imgScytheAR1.resize(300, 300);
+
+    imgScytheAR2 = loadImage("scythe attack 2r.png");
+    imgScytheAR2.resize(300, 300);
+
+    imgScytheAR3 = loadImage("scythe attack 3r.png");
+    imgScytheAR3.resize(300, 300);
+
+    imgScytheAR4 = loadImage("scythe attack 4r.png");
+    imgScytheAR4.resize(300, 300);
+
+    imgScytheAR5 = loadImage("scythe attack 5r.png");
+    imgScytheAR5.resize(300, 300);
+
+    imgScytheAR6 = loadImage("scythe attack 6r.png");
+    imgScytheAR6.resize(300, 300);
+
+    imgScytheAR7 = loadImage("scythe attack 7r.png");
+    imgScytheAR7.resize(300, 300);
+    
+    imgScytheAR8 = loadImage("scythe attack 8r.png");
+    imgScytheAR8.resize(300, 300);
+
+    // Left
+    imgScytheAL1 = loadImage("scythe attack 1l.png");
+    imgScytheAL1.resize(300, 300);
+
+    imgScytheAL2 = loadImage("scythe attack 2l.png");
+    imgScytheAL2.resize(300, 300);
+
+    imgScytheAL3 = loadImage("scythe attack 3l.png");
+    imgScytheAL3.resize(300, 300);
+
+    imgScytheAL4 = loadImage("scythe attack 4l.png");
+    imgScytheAL4.resize(300, 300);
+
+    imgScytheAL5 = loadImage("scythe attack 5l.png");
+    imgScytheAL5.resize(300, 300);
+
+    imgScytheAL6 = loadImage("scythe attack 6l.png");
+    imgScytheAL6.resize(300, 300);
+
+    imgScytheAL7 = loadImage("scythe attack 7l.png");
+    imgScytheAL7.resize(300, 300);
+    
+    imgScytheAL8 = loadImage("scythe attack 8l.png");
+    imgScytheAL8.resize(300, 300);
 
     imgStandRight = loadImage("stand right.png");
     imgStandRight.resize(200, 200);
@@ -73,6 +145,26 @@ public class Sketch extends PApplet {
     imgLeftWalking[1] = imgWalkLeft1;
     imgLeftWalking[2] = imgWalkLeft2;
     imgLeftWalking[3] = imgWalkLeft2;
+
+    imgRightAttack[0] = imgScytheAR1;
+    imgRightAttack[1] = imgScytheAR2;
+    imgRightAttack[2] = imgScytheAR3;
+    imgRightAttack[3] = imgScytheAR4;
+    imgRightAttack[4] = imgScytheAR5;
+    imgRightAttack[5] = imgScytheAR6;
+    imgRightAttack[6] = imgScytheAR7;
+    imgRightAttack[7] = imgScytheAR8;
+    imgRightAttack[8] = imgScytheAR8;
+
+    imgLeftAttack[0] = imgScytheAL1;
+    imgLeftAttack[1] = imgScytheAL2;
+    imgLeftAttack[2] = imgScytheAL3;
+    imgLeftAttack[3] = imgScytheAL4;
+    imgLeftAttack[4] = imgScytheAL5;
+    imgLeftAttack[5] = imgScytheAL6;
+    imgLeftAttack[6] = imgScytheAL7;
+    imgLeftAttack[7] = imgScytheAL8;
+    imgLeftAttack[8] = imgScytheAL8;
     
     frameRate(9);
 
@@ -85,7 +177,9 @@ public class Sketch extends PApplet {
     if(blnRight && intCharX <= 1350){
       intFrame++;
       intFrame %= imgRightWalking.length;
-      image(imgScytheRestRight, intCharX - 80, intCharY);
+      if(!blnAtk){
+        image(imgScytheRestRight, intCharX - 80, intCharY);
+      }
       image(imgRightWalking[intFrame], intCharX, intCharY);
       intCharX += intSpeedX;
 
@@ -94,47 +188,62 @@ public class Sketch extends PApplet {
 
     else if(blnLeft && intCharX >= -50){
       intFrame++;
-      intFrame %= imgRightWalking.length;
-      image(imgScytheRestLeft, intCharX + 80, intCharY);
+      intFrame %= imgLeftWalking.length;
+      if(!blnAtk){
+        image(imgScytheRestLeft, intCharX + 80, intCharY);
+      }
       image(imgLeftWalking[intFrame], intCharX, intCharY);
       intCharX -= intSpeedX;
 
       charKeys.add('a');
     }
 
-    // else if(blnJump){
-    //   if(charKeys.get(charKeys.size() - 1) == 'd'){
-    //     image(imgStandRight, intCharX, intCharY);
-    //   }
-
-    //   else if(charKeys.get(charKeys.size() - 1) == 'a'){
-    //     image(imgStandLeft, intCharX, intCharY);
-    //   }
-
-    //   intCharY -= intSpeedY;
-    // }
-
     else{
       if(charKeys.get(charKeys.size() - 1) == 'd'){
-        image(imgScytheRestRight, intCharX - 80, intCharY);
+        if(!blnAtk){
+          image(imgScytheRestRight, intCharX - 80, intCharY);
+        }
         image(imgStandRight, intCharX, intCharY); 
       }
       
       else if(charKeys.get(charKeys.size() - 1) == 'a'){
-        image(imgScytheRestLeft, intCharX + 80, intCharY);
+        if(!blnAtk){
+          image(imgScytheRestLeft, intCharX + 80, intCharY);
+        }
         image(imgStandLeft, intCharX, intCharY);
       }
+    }
 
+    if(blnAtk){
+      if(charKeys.get(charKeys.size() - 1) == 'd'){
+        intFrame++;
+        intFrame %= imgRightAttack.length;
+        image(imgRightAttack[intFrame], intCharX - 10, intCharY - 30);
+        if(intFrame == 8){
+          blnAtk = false;
+        }
+      }
+
+      else if(charKeys.get(charKeys.size() - 1) == 'a'){
+        intFrame++;
+        intFrame %= imgLeftAttack.length;
+        image(imgLeftAttack[intFrame], intCharX - 90, intCharY - 30);
+        if(intFrame == 8){
+          blnAtk = false;
+        }
+      }
     }
   }
 
   public void keyPressed(){
     if(key == 'a'){
       blnLeft = true;
+      blnAtk = false;
     }
 
     if(key == 'd'){
       blnRight = true;
+      blnAtk = false;
     }
 
     if(key == ' '){
@@ -145,14 +254,20 @@ public class Sketch extends PApplet {
   public void keyReleased(){
     if(key == 'a'){
       blnLeft = false;
+      blnAtk = false;
     }
 
     if(key == 'd'){
       blnRight = false;
+      blnAtk = false;
     }
 
     if(key == ' '){
       blnJump = false;
     }
+  }
+
+  public void mousePressed(){
+    blnAtk = true;
   }
 }
