@@ -4,6 +4,13 @@ import processing.core.PImage;
 
 public class Sketch extends PApplet {
   PImage imgBackground;
+  PImage imgMenu;
+  PImage imgStart;
+  PImage imgTut;
+  PImage imgGal;
+
+  PImage imgHeart;
+  PImage imgLostHeart;
 
   PImage imgScytheRestRight;
   PImage imgScytheRestLeft;
@@ -56,12 +63,28 @@ public class Sketch extends PApplet {
   ArrayList<Integer> intClickX = new ArrayList<Integer>();
   ArrayList<Integer> intClickY = new ArrayList<Integer>();
 
+  int intLvl = 0;
+
   public void settings() {
     size(1500, 750);
   }
 
   public void setup() {
     imgBackground = loadImage("background.png");
+
+    imgMenu = loadImage("menu.png");
+
+    imgStart = loadImage("start select.png");
+
+    imgTut = loadImage("tut select.png");
+
+    imgGal = loadImage("gallery select.png");
+
+    imgHeart = loadImage("heart.png");
+    imgHeart.resize(50, 50);
+
+    imgLostHeart = loadImage("lost heart.png");
+    imgLostHeart.resize(50, 50);
 
     imgScytheRestRight = loadImage("scythe rest right.png");
     imgScytheRestRight.resize(200, 200);
@@ -169,69 +192,31 @@ public class Sketch extends PApplet {
     frameRate(9);
 
     charKeys.add('d');
+
+    intClickX.add(0);
+    intClickY.add(0);
   }
 
   public void draw() {
-    image(imgBackground, 0, 0);
 
-    if(blnRight && intCharX <= 1350){
-      intFrame++;
-      intFrame %= imgRightWalking.length;
-      if(!blnAtk){
-        image(imgScytheRestRight, intCharX - 80, intCharY);
-      }
-      image(imgRightWalking[intFrame], intCharX, intCharY);
-      intCharX += intSpeedX;
-
-      charKeys.add('d');
+    if(intLvl == 0){
+      startMenu();
     }
 
-    else if(blnLeft && intCharX >= -50){
-      intFrame++;
-      intFrame %= imgLeftWalking.length;
-      if(!blnAtk){
-        image(imgScytheRestLeft, intCharX + 80, intCharY);
-      }
-      image(imgLeftWalking[intFrame], intCharX, intCharY);
-      intCharX -= intSpeedX;
-
-      charKeys.add('a');
+    else if(intLvl == 1){
+      firstLvl();
     }
 
-    else{
-      if(charKeys.get(charKeys.size() - 1) == 'd'){
-        if(!blnAtk){
-          image(imgScytheRestRight, intCharX - 80, intCharY);
-        }
-        image(imgStandRight, intCharX, intCharY); 
-      }
-      
-      else if(charKeys.get(charKeys.size() - 1) == 'a'){
-        if(!blnAtk){
-          image(imgScytheRestLeft, intCharX + 80, intCharY);
-        }
-        image(imgStandLeft, intCharX, intCharY);
-      }
+    else if(intLvl == 2){
+      tutLvl();
     }
 
-    if(blnAtk){
-      if(charKeys.get(charKeys.size() - 1) == 'd'){
-        intFrame++;
-        intFrame %= imgRightAttack.length;
-        image(imgRightAttack[intFrame], intCharX - 10, intCharY - 30);
-        if(intFrame == 8){
-          blnAtk = false;
-        }
-      }
+    else if(intLvl == 3){
+      galleryLvl();
+    }
 
-      else if(charKeys.get(charKeys.size() - 1) == 'a'){
-        intFrame++;
-        intFrame %= imgLeftAttack.length;
-        image(imgLeftAttack[intFrame], intCharX - 90, intCharY - 30);
-        if(intFrame == 8){
-          blnAtk = false;
-        }
-      }
+    else if(intLvl == 4){
+      pauseMenu();
     }
   }
 
@@ -269,5 +254,125 @@ public class Sketch extends PApplet {
 
   public void mousePressed(){
     blnAtk = true;
+    intClickX.add(mouseX);
+    intClickY.add(mouseY);
+  }
+
+  public void startMenu(){
+    image(imgMenu, 0, 0);
+
+    if(mouseX >= 660 && mouseX <= 840){
+      if(mouseY >= 320 && mouseY <= 400){
+        image(imgStart, 0, 0);
+
+        if(intClickX.get(intClickX.size() - 1) >= 660 && intClickX.get(intClickX.size() - 1) <= 840){
+          if(intClickY.get(intClickY.size() - 1) >= 320 && intClickY.get(intClickY.size() - 1) <= 400){
+            intLvl = 1;
+          }
+        }
+      }
+    }
+
+    if(mouseX >= 620 && mouseX <= 890){
+      if(mouseY >= 460 && mouseY <= 540){
+        image(imgTut, 0, 0);
+      }
+    }
+
+    if(mouseX >= 630 && mouseX <= 870){
+      if(mouseY >= 600 && mouseY <= 680){
+        image(imgGal, 0, 0);
+      }
+    }
+  }
+
+  public void firstLvl(){
+    image(imgBackground, 0, 0);
+
+    for(int i = 0; i < 10; i++){
+      image(imgHeart, 10 + (60 * i), 10);
+    }
+
+    if(blnRight && intCharX <= 1350){
+      intFrame++;
+      intFrame %= imgRightWalking.length;
+      
+      if(!blnAtk){
+        image(imgScytheRestRight, intCharX - 80, intCharY);
+      }
+
+      image(imgRightWalking[intFrame], intCharX, intCharY);
+      intCharX += intSpeedX;
+      blnAtk = false;
+
+      charKeys.add('d');
+    }
+
+    else if(blnLeft && intCharX >= -50){
+      intFrame++;
+      intFrame %= imgLeftWalking.length;
+
+      if(!blnAtk){
+        image(imgScytheRestLeft, intCharX + 80, intCharY);
+      }
+
+      image(imgLeftWalking[intFrame], intCharX, intCharY);
+      intCharX -= intSpeedX;
+      blnAtk = false;
+
+      charKeys.add('a');
+    }
+
+    else{
+      if(charKeys.get(charKeys.size() - 1) == 'd'){
+        if(!blnAtk){
+          image(imgScytheRestRight, intCharX - 80, intCharY);
+        }
+
+        image(imgStandRight, intCharX, intCharY); 
+      }
+      
+      else if(charKeys.get(charKeys.size() - 1) == 'a'){
+        if(!blnAtk){
+          image(imgScytheRestLeft, intCharX + 80, intCharY);
+        }
+
+        image(imgStandLeft, intCharX, intCharY);
+      }
+    }
+
+    if(blnAtk){
+      if(charKeys.get(charKeys.size() - 1) == 'd'){
+        intFrame++;
+        intFrame %= imgRightAttack.length;
+        image(imgRightAttack[intFrame], intCharX - 10, intCharY - 30);
+
+        if(intFrame == 8){
+          blnAtk = false;
+        }
+      }
+
+      else if(charKeys.get(charKeys.size() - 1) == 'a'){
+        intFrame++;
+        intFrame %= imgLeftAttack.length;
+        image(imgLeftAttack[intFrame], intCharX - 90, intCharY - 30);
+
+        if(intFrame == 8){
+          blnAtk = false;
+        }
+      }
+    }
+  }
+
+  public void tutLvl(){
+    
+  }
+
+  public void galleryLvl(){
+
+  }
+
+  public void pauseMenu(){
+
   }
 }
