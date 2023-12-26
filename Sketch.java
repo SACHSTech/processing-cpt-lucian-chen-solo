@@ -12,6 +12,10 @@ public class Sketch extends PApplet {
   PImage imgHeart;
   PImage imgLostHeart;
 
+  PImage imgPrune1;
+  PImage imgPrune2;
+  PImage imgPruneAtk;
+
   PImage imgScytheRestRight;
   PImage imgScytheRestLeft;
 
@@ -46,18 +50,27 @@ public class Sketch extends PApplet {
   int intSpeedX = 15;
   int intSpeedY = 40;
 
+  int intPruneX = 1300;
+
   boolean blnRight = false;
   boolean blnLeft = false;
   boolean blnJump = false;
 
   boolean blnAtk = false;
 
+  float[] pruneArmyX = new float[5];
+  int[] pruneSpeed = new int[5];
+
   PImage[] imgRightWalking = new PImage[4];
   PImage[] imgLeftWalking = new PImage[4];
+
   PImage[] imgRightAttack = new PImage[9];
   PImage[] imgLeftAttack = new PImage[9];
 
+  PImage[] imgPruneMove = new PImage[9];
+
   int intFrame = 0;
+  int intPruneFrame = 0;
 
   ArrayList<Character> charKeys = new ArrayList<Character>();
   ArrayList<Integer> intClickX = new ArrayList<Integer>();
@@ -85,6 +98,15 @@ public class Sketch extends PApplet {
 
     imgLostHeart = loadImage("lost heart.png");
     imgLostHeart.resize(50, 50);
+
+    imgPrune1 = loadImage("prune1.png");
+    imgPrune1.resize(150, 150);
+
+    imgPrune2 = loadImage("prune2.png");
+    imgPrune2.resize(150, 150);
+
+    imgPruneAtk = loadImage("pruneAtk.png");
+    imgPruneAtk.resize(150, 150);
 
     imgScytheRestRight = loadImage("scythe rest right.png");
     imgScytheRestRight.resize(200, 200);
@@ -159,6 +181,7 @@ public class Sketch extends PApplet {
     imgWalkLeft2 = loadImage("walk left 2.png");
     imgWalkLeft2.resize(200, 200);
 
+    // Animations
     imgRightWalking[0] = imgWalkRight1;
     imgRightWalking[1] = imgWalkRight1;
     imgRightWalking[2] = imgWalkRight2;
@@ -188,6 +211,16 @@ public class Sketch extends PApplet {
     imgLeftAttack[6] = imgScytheAL7;
     imgLeftAttack[7] = imgScytheAL8;
     imgLeftAttack[8] = imgScytheAL8;
+
+    imgPruneMove[0] = imgPrune1;
+    imgPruneMove[1] = imgPrune2;
+    imgPruneMove[2] = imgPrune1;
+    imgPruneMove[3] = imgPrune2;
+    imgPruneMove[4] = imgPrune1;
+    imgPruneMove[5] = imgPrune2;
+    imgPruneMove[6] = imgPrune1;
+    imgPruneMove[7] = imgPrune2;
+    imgPruneMove[8] = imgPrune1;
     
     frameRate(9);
 
@@ -195,6 +228,11 @@ public class Sketch extends PApplet {
 
     intClickX.add(0);
     intClickY.add(0);
+
+    for (int i = 0; i < pruneArmyX.length; i++) {
+      pruneArmyX[i] = random(1000, 1500);
+      pruneSpeed[i] = 10;
+    }
   }
 
   public void draw() {
@@ -341,6 +379,8 @@ public class Sketch extends PApplet {
       }
     }
 
+    prune();
+
     if(blnAtk){
       if(charKeys.get(charKeys.size() - 1) == 'd'){
         intFrame++;
@@ -374,5 +414,23 @@ public class Sketch extends PApplet {
 
   public void pauseMenu(){
 
+  }
+
+  public void prune(){
+    intPruneFrame++;
+    intPruneFrame %= imgPruneMove.length;
+
+    for(int i = 0; i < pruneArmyX.length; i++){
+      image(imgPruneMove[intPruneFrame], pruneArmyX[i], 550);
+      pruneArmyX[i] -= pruneSpeed[i];
+
+      if(pruneArmyX[i] <= 0 || pruneArmyX[i] >= 1500){
+        pruneSpeed[i] = pruneSpeed[i] * -1;
+      }
+
+      if(pruneArmyX[i] >= intCharX + 20 && pruneArmyX[i] <= intCharX + 200){
+        image(imgPruneAtk, pruneArmyX[i], 550);
+      }
+    }
   }
 }
