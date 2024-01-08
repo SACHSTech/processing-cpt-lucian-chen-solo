@@ -12,9 +12,13 @@ public class Sketch extends PApplet {
   PImage imgHeart;
   PImage imgLostHeart;
 
-  PImage imgPrune1;
-  PImage imgPrune2;
-  PImage imgPruneAtk;
+  PImage imgPruneLeft1;
+  PImage imgPruneLeft2;
+  PImage imgPruneLeftAtk;
+
+  PImage imgPruneRight1;
+  PImage imgPruneRight2;
+  PImage imgPruneRightAtk;
 
   PImage imgScytheRestRight;
   PImage imgScytheRestLeft;
@@ -50,6 +54,8 @@ public class Sketch extends PApplet {
   int intSpeedX = 15;
   int intSpeedY = 40;
 
+  int intLives = 10;
+
   int intPruneX = 1300;
 
   boolean blnRight = false;
@@ -58,8 +64,9 @@ public class Sketch extends PApplet {
 
   boolean blnAtk = false;
 
-  float[] pruneArmyX = new float[5];
+  float[] pruneArmyX = new float[1];
   int[] pruneSpeed = new int[5];
+  int[] pruneHealth = new int[5];
 
   PImage[] imgRightWalking = new PImage[4];
   PImage[] imgLeftWalking = new PImage[4];
@@ -67,7 +74,8 @@ public class Sketch extends PApplet {
   PImage[] imgRightAttack = new PImage[9];
   PImage[] imgLeftAttack = new PImage[9];
 
-  PImage[] imgPruneMove = new PImage[9];
+  PImage[] imgPruneLeftMove = new PImage[9];
+  PImage[] imgPruneRightMove = new PImage[9];
 
   int intFrame = 0;
   int intPruneFrame = 0;
@@ -99,14 +107,23 @@ public class Sketch extends PApplet {
     imgLostHeart = loadImage("lost heart.png");
     imgLostHeart.resize(50, 50);
 
-    imgPrune1 = loadImage("prune1.png");
-    imgPrune1.resize(150, 150);
+    imgPruneLeft1 = loadImage("pruneLeft1.png");
+    imgPruneLeft1.resize(150, 150);
 
-    imgPrune2 = loadImage("prune2.png");
-    imgPrune2.resize(150, 150);
+    imgPruneLeft2 = loadImage("pruneLeft2.png");
+    imgPruneLeft2.resize(150, 150);
 
-    imgPruneAtk = loadImage("pruneAtk.png");
-    imgPruneAtk.resize(150, 150);
+    imgPruneLeftAtk = loadImage("pruneLeftAtk.png");
+    imgPruneLeftAtk.resize(150, 150);
+
+    imgPruneRight1 = loadImage("pruneRight1.png");
+    imgPruneRight1.resize(150, 150);
+
+    imgPruneRight2 = loadImage("pruneRight2.png");
+    imgPruneRight2.resize(150, 150);
+
+    imgPruneRightAtk = loadImage("pruneRightAtk.png");
+    imgPruneRightAtk.resize(150, 150);
 
     imgScytheRestRight = loadImage("scythe rest right.png");
     imgScytheRestRight.resize(200, 200);
@@ -212,15 +229,25 @@ public class Sketch extends PApplet {
     imgLeftAttack[7] = imgScytheAL8;
     imgLeftAttack[8] = imgScytheAL8;
 
-    imgPruneMove[0] = imgPrune1;
-    imgPruneMove[1] = imgPrune2;
-    imgPruneMove[2] = imgPrune1;
-    imgPruneMove[3] = imgPrune2;
-    imgPruneMove[4] = imgPrune1;
-    imgPruneMove[5] = imgPrune2;
-    imgPruneMove[6] = imgPrune1;
-    imgPruneMove[7] = imgPrune2;
-    imgPruneMove[8] = imgPrune1;
+    imgPruneLeftMove[0] = imgPruneLeft1;
+    imgPruneLeftMove[1] = imgPruneLeft2;
+    imgPruneLeftMove[2] = imgPruneLeft1;
+    imgPruneLeftMove[3] = imgPruneLeft2;
+    imgPruneLeftMove[4] = imgPruneLeft1;
+    imgPruneLeftMove[5] = imgPruneLeft2;
+    imgPruneLeftMove[6] = imgPruneLeft1;
+    imgPruneLeftMove[7] = imgPruneLeft2;
+    imgPruneLeftMove[8] = imgPruneLeft1;
+
+    imgPruneRightMove[0] = imgPruneRight1;
+    imgPruneRightMove[1] = imgPruneRight2;
+    imgPruneRightMove[2] = imgPruneRight1;
+    imgPruneRightMove[3] = imgPruneRight2;
+    imgPruneRightMove[4] = imgPruneRight1;
+    imgPruneRightMove[5] = imgPruneRight2;
+    imgPruneRightMove[6] = imgPruneRight1;
+    imgPruneRightMove[7] = imgPruneRight2;
+    imgPruneRightMove[8] = imgPruneRight1;
     
     frameRate(9);
 
@@ -230,8 +257,9 @@ public class Sketch extends PApplet {
     intClickY.add(0);
 
     for (int i = 0; i < pruneArmyX.length; i++) {
-      pruneArmyX[i] = random(1000, 1500);
+      pruneArmyX[i] = random(1000, 1400);
       pruneSpeed[i] = 10;
+      pruneHealth[i] = 50;
     }
   }
 
@@ -291,7 +319,10 @@ public class Sketch extends PApplet {
   }
 
   public void mousePressed(){
-    blnAtk = true;
+    if(intLvl > 0){
+      blnAtk = true;
+    }
+
     intClickX.add(mouseX);
     intClickY.add(mouseY);
   }
@@ -314,12 +345,24 @@ public class Sketch extends PApplet {
     if(mouseX >= 620 && mouseX <= 890){
       if(mouseY >= 460 && mouseY <= 540){
         image(imgTut, 0, 0);
+
+        if(intClickX.get(intClickX.size() - 1) >= 620 && intClickX.get(intClickX.size() - 1) <= 890){
+          if(intClickY.get(intClickY.size() - 1) >= 460 && intClickY.get(intClickY.size() - 1) <= 540){
+            intLvl = 2;
+          }
+        }
       }
     }
 
     if(mouseX >= 630 && mouseX <= 870){
       if(mouseY >= 600 && mouseY <= 680){
         image(imgGal, 0, 0);
+
+        if(intClickX.get(intClickX.size() - 1) >= 630 && intClickX.get(intClickX.size() - 1) <= 870){
+          if(intClickY.get(intClickY.size() - 1) >= 600 && intClickY.get(intClickY.size() - 1) <= 680){
+            intLvl = 3;
+          }
+        }
       }
     }
   }
@@ -405,11 +448,11 @@ public class Sketch extends PApplet {
   }
 
   public void tutLvl(){
-    
+    image(imgBackground, 0, 0);
   }
 
   public void galleryLvl(){
-
+    image(imgBackground, 0, 0);
   }
 
   public void pauseMenu(){
@@ -418,19 +461,40 @@ public class Sketch extends PApplet {
 
   public void prune(){
     intPruneFrame++;
-    intPruneFrame %= imgPruneMove.length;
+    intPruneFrame %= imgPruneLeftMove.length;
 
     for(int i = 0; i < pruneArmyX.length; i++){
-      image(imgPruneMove[intPruneFrame], pruneArmyX[i], 550);
-      pruneArmyX[i] -= pruneSpeed[i];
+      // Left or right facing
+      if(pruneSpeed[i] > 0){
+        image(imgPruneLeftMove[intPruneFrame], pruneArmyX[i], 550);
+        pruneArmyX[i] -= pruneSpeed[i];
+      }
 
-      if(pruneArmyX[i] <= 0 || pruneArmyX[i] >= 1500){
+      else{
+        image(imgPruneRightMove[intPruneFrame], pruneArmyX[i], 550);
+        pruneArmyX[i] -= pruneSpeed[i];
+      }
+
+      // Keeps prune in bounds
+      if(pruneArmyX[i] <= -10 || pruneArmyX[i] >= 1400){
         pruneSpeed[i] = pruneSpeed[i] * -1;
       }
 
-      if(pruneArmyX[i] >= intCharX + 20 && pruneArmyX[i] <= intCharX + 200){
-        image(imgPruneAtk, pruneArmyX[i], 550);
+      // Left or right animation
+      if(pruneArmyX[i] >= intCharX + 20 && pruneArmyX[i] <= intCharX + 100 && pruneSpeed[i] > 0){
+        image(imgPruneLeftAtk, pruneArmyX[i], 550);
       }
+
+      else if(pruneArmyX[i] >= intCharX - 50 && pruneArmyX[i] <= intCharX + 50 && pruneSpeed[i] < 0){
+        image(imgPruneRightAtk, pruneArmyX[i], 550);
+      }
+
+      // Losing hearts
+      if(pruneArmyX[i] >= intCharX + 15 && pruneArmyX[i] <= intCharX + 20 || pruneArmyX[i] >= intCharX - 15 && pruneArmyX[i] <= intCharX - 20){
+        intLives--; 
+      }
+
+      image(imgLostHeart, 10 + (60 * (1 + intLives)), 10);
     }
   }
 }
