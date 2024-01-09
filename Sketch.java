@@ -8,9 +8,9 @@ public class Sketch extends PApplet {
   PImage imgStart;
   PImage imgTut;
   PImage imgGal;
+  PImage imgGameOver;
 
   PImage imgHeart;
-  PImage imgLostHeart;
 
   PImage imgPruneLeft1;
   PImage imgPruneLeft2;
@@ -64,7 +64,7 @@ public class Sketch extends PApplet {
 
   boolean blnAtk = false;
 
-  float[] pruneArmyX = new float[1];
+  float[] pruneArmyX = new float[3];
   int[] pruneSpeed = new int[5];
   int[] pruneHealth = new int[5];
 
@@ -101,11 +101,10 @@ public class Sketch extends PApplet {
 
     imgGal = loadImage("gallery select.png");
 
+    imgGameOver = loadImage("game over.png");
+
     imgHeart = loadImage("heart.png");
     imgHeart.resize(50, 50);
-
-    imgLostHeart = loadImage("lost heart.png");
-    imgLostHeart.resize(50, 50);
 
     imgPruneLeft1 = loadImage("pruneLeft1.png");
     imgPruneLeft1.resize(150, 150);
@@ -263,8 +262,7 @@ public class Sketch extends PApplet {
     }
   }
 
-  public void draw() {
-
+  public void draw() {  
     if(intLvl == 0){
       startMenu();
     }
@@ -283,6 +281,10 @@ public class Sketch extends PApplet {
 
     else if(intLvl == 4){
       pauseMenu();
+    }
+
+    if(intLives <= 0){
+      image(imgGameOver, 0, 0);
     }
   }
 
@@ -370,7 +372,7 @@ public class Sketch extends PApplet {
   public void firstLvl(){
     image(imgBackground, 0, 0);
 
-    for(int i = 0; i < 10; i++){
+    for(int i = 0; i < intLives; i++){
       image(imgHeart, 10 + (60 * i), 10);
     }
 
@@ -490,11 +492,9 @@ public class Sketch extends PApplet {
       }
 
       // Losing hearts
-      if(pruneArmyX[i] >= intCharX + 15 && pruneArmyX[i] <= intCharX + 20 || pruneArmyX[i] >= intCharX - 15 && pruneArmyX[i] <= intCharX - 20){
+      if((pruneArmyX[i] + 70) >= intCharX + 90 && (pruneArmyX[i] + 70) <= intCharX + 100){
         intLives--; 
       }
-
-      image(imgLostHeart, 10 + (60 * (1 + intLives)), 10);
     }
   }
 }
