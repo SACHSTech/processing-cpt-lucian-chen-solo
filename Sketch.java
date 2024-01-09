@@ -56,23 +56,22 @@ public class Sketch extends PApplet {
 
   int intLives = 10;
 
-  int intPruneX = 1300;
-
   boolean blnRight = false;
   boolean blnLeft = false;
   boolean blnJump = false;
 
   boolean blnAtk = false;
 
-  float[] pruneArmyX = new float[3];
-  int[] pruneSpeed = new int[5];
-  int[] pruneHealth = new int[5];
-
   PImage[] imgRightWalking = new PImage[4];
   PImage[] imgLeftWalking = new PImage[4];
 
   PImage[] imgRightAttack = new PImage[9];
   PImage[] imgLeftAttack = new PImage[9];
+
+  float[] pruneArmyX = new float[5];
+  float[] pruneArmyY = new float[5];
+  int[] pruneSpeed = new int[5];
+  float[] pruneHealth = new float[5];
 
   PImage[] imgPruneLeftMove = new PImage[9];
   PImage[] imgPruneRightMove = new PImage[9];
@@ -106,6 +105,7 @@ public class Sketch extends PApplet {
     imgHeart = loadImage("heart.png");
     imgHeart.resize(50, 50);
 
+    // Prune
     imgPruneLeft1 = loadImage("pruneLeft1.png");
     imgPruneLeft1.resize(150, 150);
 
@@ -130,6 +130,7 @@ public class Sketch extends PApplet {
     imgScytheRestLeft = loadImage("scythe rest left.png");
     imgScytheRestLeft.resize(200, 200);
 
+    // Right
     imgScytheAR1 = loadImage("scythe attack 1r.png");
     imgScytheAR1.resize(300, 300);
 
@@ -179,6 +180,7 @@ public class Sketch extends PApplet {
     imgScytheAL8 = loadImage("scythe attack 8l.png");
     imgScytheAL8.resize(300, 300);
 
+    // Character
     imgStandRight = loadImage("stand right.png");
     imgStandRight.resize(200, 200);
 
@@ -255,10 +257,12 @@ public class Sketch extends PApplet {
     intClickX.add(0);
     intClickY.add(0);
 
+    // Sets the location, speed, and health of all prunes
     for (int i = 0; i < pruneArmyX.length; i++) {
       pruneArmyX[i] = random(1000, 1400);
+      pruneArmyY[i] = 550;
       pruneSpeed[i] = 10;
-      pruneHealth[i] = 50;
+      pruneHealth[i] = 100;
     }
   }
 
@@ -268,7 +272,7 @@ public class Sketch extends PApplet {
     }
 
     else if(intLvl == 1){
-      firstLvl();
+      gameLvl();
     }
 
     else if(intLvl == 2){
@@ -302,6 +306,27 @@ public class Sketch extends PApplet {
     if(key == ' '){
       blnJump = true;
     }
+
+    // Return to menu
+    if((intLvl == 2 || intLvl == 3) && key == 'x'){
+      intLvl = 0;
+      intClickX.add(0);
+      intClickY.add(0);
+    }
+
+    // Pause
+    if(intLvl == 1 && key == 'x'){
+      intLvl = 4;
+      intClickX.add(0);
+      intClickY.add(0);
+    }
+
+    // Resume
+    if(intLvl == 4 && key == 'r'){
+      intLvl = 1;
+      intClickX.add(0);
+      intClickY.add(0);
+    }
   }
 
   public void keyReleased(){
@@ -321,7 +346,7 @@ public class Sketch extends PApplet {
   }
 
   public void mousePressed(){
-    if(intLvl > 0){
+    if(intLvl == 1){
       blnAtk = true;
     }
 
@@ -332,6 +357,7 @@ public class Sketch extends PApplet {
   public void startMenu(){
     image(imgMenu, 0, 0);
 
+    // Start select
     if(mouseX >= 660 && mouseX <= 840){
       if(mouseY >= 320 && mouseY <= 400){
         image(imgStart, 0, 0);
@@ -344,6 +370,7 @@ public class Sketch extends PApplet {
       }
     }
 
+    // Tutorial select
     if(mouseX >= 620 && mouseX <= 890){
       if(mouseY >= 460 && mouseY <= 540){
         image(imgTut, 0, 0);
@@ -356,6 +383,7 @@ public class Sketch extends PApplet {
       }
     }
 
+    // Gallery select
     if(mouseX >= 630 && mouseX <= 870){
       if(mouseY >= 600 && mouseY <= 680){
         image(imgGal, 0, 0);
@@ -369,13 +397,14 @@ public class Sketch extends PApplet {
     }
   }
 
-  public void firstLvl(){
+  public void gameLvl(){
     image(imgBackground, 0, 0);
 
     for(int i = 0; i < intLives; i++){
       image(imgHeart, 10 + (60 * i), 10);
     }
 
+    // Character movement
     if(blnRight && intCharX <= 1350){
       intFrame++;
       intFrame %= imgRightWalking.length;
@@ -406,6 +435,7 @@ public class Sketch extends PApplet {
       charKeys.add('a');
     }
 
+    // Character resting
     else{
       if(charKeys.get(charKeys.size() - 1) == 'd'){
         if(!blnAtk){
@@ -426,6 +456,7 @@ public class Sketch extends PApplet {
 
     prune();
 
+    // Attack animation
     if(blnAtk){
       if(charKeys.get(charKeys.size() - 1) == 'd'){
         intFrame++;
@@ -458,22 +489,38 @@ public class Sketch extends PApplet {
   }
 
   public void pauseMenu(){
-
+    image(imgBackground, 0, 0);
   }
 
+  // All interactions with prunes
   public void prune(){
     intPruneFrame++;
     intPruneFrame %= imgPruneLeftMove.length;
 
     for(int i = 0; i < pruneArmyX.length; i++){
+      // Prune healthbar
+      stroke(255);
+      fill(135, 219, 121);
+
+      if(pruneHealth[i] == 0){
+        noStroke();
+      }
+
+      rect(pruneArmyX[i] + 15, pruneArmyY[i], 1 * pruneHealth[i], 25);
+
+      // WIP prune loses health if it touches player
+      if(((pruneArmyX[i] + 70) >= intCharX + 90 && (pruneArmyX[i] + 70) <= intCharX + 100) && pruneHealth[i] > 0){
+        pruneHealth[i] = pruneHealth[i] - 50;
+      }
+      
       // Left or right facing
       if(pruneSpeed[i] > 0){
-        image(imgPruneLeftMove[intPruneFrame], pruneArmyX[i], 550);
+        image(imgPruneLeftMove[intPruneFrame], pruneArmyX[i], pruneArmyY[i]);
         pruneArmyX[i] -= pruneSpeed[i];
       }
 
       else{
-        image(imgPruneRightMove[intPruneFrame], pruneArmyX[i], 550);
+        image(imgPruneRightMove[intPruneFrame], pruneArmyX[i], pruneArmyY[i]);
         pruneArmyX[i] -= pruneSpeed[i];
       }
 
@@ -484,11 +531,11 @@ public class Sketch extends PApplet {
 
       // Left or right animation
       if(pruneArmyX[i] >= intCharX + 20 && pruneArmyX[i] <= intCharX + 100 && pruneSpeed[i] > 0){
-        image(imgPruneLeftAtk, pruneArmyX[i], 550);
+        image(imgPruneLeftAtk, pruneArmyX[i], pruneArmyY[i]);
       }
 
       else if(pruneArmyX[i] >= intCharX - 50 && pruneArmyX[i] <= intCharX + 50 && pruneSpeed[i] < 0){
-        image(imgPruneRightAtk, pruneArmyX[i], 550);
+        image(imgPruneRightAtk, pruneArmyX[i], pruneArmyY[i]);
       }
 
       // Losing hearts
