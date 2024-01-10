@@ -68,22 +68,24 @@ public class Sketch extends PApplet {
   PImage[] imgRightAttack = new PImage[9];
   PImage[] imgLeftAttack = new PImage[9];
 
-  float[] pruneArmyX = new float[5];
+  float[] pruneArmyX = new float[1];
   float[] pruneArmyY = new float[5];
   int[] pruneSpeed = new int[5];
   float[] pruneHealth = new float[5];
+  boolean[] blnDrawPrune = new boolean[5];
 
   PImage[] imgPruneLeftMove = new PImage[9];
   PImage[] imgPruneRightMove = new PImage[9];
 
   int intFrame = 0;
+  int intAtkFrame = 0;
   int intPruneFrame = 0;
 
   ArrayList<Character> charKeys = new ArrayList<Character>();
   ArrayList<Integer> intClickX = new ArrayList<Integer>();
   ArrayList<Integer> intClickY = new ArrayList<Integer>();
 
-  int intLvl = 0;
+  int intLvl = 1;
 
   public void settings() {
     size(1500, 750);
@@ -263,6 +265,7 @@ public class Sketch extends PApplet {
       pruneArmyY[i] = 550;
       pruneSpeed[i] = 10;
       pruneHealth[i] = 100;
+      blnDrawPrune[i] = true;
     }
   }
 
@@ -411,6 +414,7 @@ public class Sketch extends PApplet {
       
       if(!blnAtk){
         image(imgScytheRestRight, intCharX - 80, intCharY);
+        intAtkFrame = 0;
       }
 
       image(imgRightWalking[intFrame], intCharX, intCharY);
@@ -426,6 +430,7 @@ public class Sketch extends PApplet {
 
       if(!blnAtk){
         image(imgScytheRestLeft, intCharX + 80, intCharY);
+        intAtkFrame = 0;
       }
 
       image(imgLeftWalking[intFrame], intCharX, intCharY);
@@ -459,21 +464,21 @@ public class Sketch extends PApplet {
     // Attack animation
     if(blnAtk){
       if(charKeys.get(charKeys.size() - 1) == 'd'){
-        intFrame++;
-        intFrame %= imgRightAttack.length;
-        image(imgRightAttack[intFrame], intCharX - 10, intCharY - 30);
+        intAtkFrame++;
+        intAtkFrame %= imgRightAttack.length;
+        image(imgRightAttack[intAtkFrame], intCharX - 10, intCharY - 30);
 
-        if(intFrame == 8){
+        if(intAtkFrame == 8){
           blnAtk = false;
         }
       }
 
       else if(charKeys.get(charKeys.size() - 1) == 'a'){
-        intFrame++;
-        intFrame %= imgLeftAttack.length;
-        image(imgLeftAttack[intFrame], intCharX - 90, intCharY - 30);
+        intAtkFrame++;
+        intAtkFrame %= imgLeftAttack.length;
+        image(imgLeftAttack[intAtkFrame], intCharX - 90, intCharY - 30);
 
-        if(intFrame == 8){
+        if(intAtkFrame == 8){
           blnAtk = false;
         }
       }
@@ -508,36 +513,61 @@ public class Sketch extends PApplet {
 
       rect(pruneArmyX[i] + 15, pruneArmyY[i], 1 * pruneHealth[i], 25);
 
-      // WIP prune loses health if it touches player
-      if(((pruneArmyX[i] + 70) >= intCharX + 90 && (pruneArmyX[i] + 70) <= intCharX + 100) && pruneHealth[i] > 0){
-        pruneHealth[i] = pruneHealth[i] - 50;
+      // Prune health lose
+      if(charKeys.get(charKeys.size() - 1) == 'd' && blnAtk){
+        if(((intCharX + 200 >= pruneArmyX[i] + 10) && (intCharX + 250 <= pruneArmyX[i] + 120)) && pruneHealth[i] > 0 && intAtkFrame == 1){
+          pruneHealth[i] = pruneHealth[i] - 10;
+          pruneArmyX[i] = pruneArmyX[i] + 50;
+        }
       }
+
+      if(charKeys.get(charKeys.size() - 1) == 'a' && blnAtk){
+        if(((intCharX - 50 >= pruneArmyX[i] + 10) && (intCharX <= pruneArmyX[i] + 120)) && pruneHealth[i] > 0 && intAtkFrame == 1){
+          pruneHealth[i] = pruneHealth[i] - 10;
+          pruneArmyX[i] = pruneArmyX[i] - 50;
+        }
+      }
+
+      if(pruneHealth[i] <= 0){
+        blnDrawPrune[i] = false;
+      }
+
+      // Checks to see if prune has health
+      if(blnDrawPrune[i]){
+        // Left or right facing
+        if(pruneSpeed[i] > 0){
+          image(imgPruneLeftMove[intPruneFrame], pruneArmyX[i], pruneArmyY[i]);
+          pruneArmyX[i] -= pruneSpeed[i];
+        }
+
+        else{
+          image(imgPruneRightMove[intPruneFrame], pruneArmyX[i], pruneArmyY[i]);
+          pruneArmyX[i] -= pruneSpeed[i];
+        }
       
-      // Left or right facing
-      if(pruneSpeed[i] > 0){
-        image(imgPruneLeftMove[intPruneFrame], pruneArmyX[i], pruneArmyY[i]);
-        pruneArmyX[i] -= pruneSpeed[i];
+        // Left or right animation
+        if(pruneArmyX[i] >= intCharX + 20 && pruneArmyX[i] <= intCharX + 100 && pruneSpeed[i] > 0){
+          image(imgPruneLeftAtk, pruneArmyX[i], pruneArmyY[i]);
+        }
+
+        else if(pruneArmyX[i] >= intCharX - 50 && pruneArmyX[i] <= intCharX + 50 && pruneSpeed[i] < 0){
+          image(imgPruneRightAtk, pruneArmyX[i], pruneArmyY[i]);
+        }
       }
 
-      else{
-        image(imgPruneRightMove[intPruneFrame], pruneArmyX[i], pruneArmyY[i]);
-        pruneArmyX[i] -= pruneSpeed[i];
-      }
-
-      // Keeps prune in bounds
-      if(pruneArmyX[i] <= -10 || pruneArmyX[i] >= 1400){
+      // Keeps prune in bounds and hones the player
+      if(pruneArmyX[i] <= -20 || pruneArmyX[i] >= 1400){
         pruneSpeed[i] = pruneSpeed[i] * -1;
       }
 
-      // Left or right animation
-      if(pruneArmyX[i] >= intCharX + 20 && pruneArmyX[i] <= intCharX + 100 && pruneSpeed[i] > 0){
-        image(imgPruneLeftAtk, pruneArmyX[i], pruneArmyY[i]);
+      if(pruneArmyX[i] <= intCharX - 100){
+        pruneSpeed[i] = -10;
       }
 
-      else if(pruneArmyX[i] >= intCharX - 50 && pruneArmyX[i] <= intCharX + 50 && pruneSpeed[i] < 0){
-        image(imgPruneRightAtk, pruneArmyX[i], pruneArmyY[i]);
+      if(pruneArmyX[i] >= intCharX + 150){
+        pruneSpeed[i] = 10;
       }
-
+      
       // Losing hearts
       if((pruneArmyX[i] + 70) >= intCharX + 90 && (pruneArmyX[i] + 70) <= intCharX + 100){
         intLives--; 
