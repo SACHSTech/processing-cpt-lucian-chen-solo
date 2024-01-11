@@ -330,14 +330,16 @@ public class Sketch extends PApplet {
     if(key == 'a'){
       blnLeft = true;
       blnAtk = false;
+      blnJump = false;
     }
 
     if(key == 'd'){
       blnRight = true;
       blnAtk = false;
+      blnJump = false;
     }
 
-    if(key == 'j'){
+    if(key == ' '){
       blnJump = true;
       blnAtk = false;
     }
@@ -365,11 +367,6 @@ public class Sketch extends PApplet {
 
     if(key == 'd'){
       blnRight = false;
-      blnAtk = false;
-    }
-
-    if(key == 'j'){
-      blnJump = false;
       blnAtk = false;
     }
   }
@@ -447,6 +444,8 @@ public class Sketch extends PApplet {
       intCharX += intSpeedX;
       blnAtk = false;
 
+      intCharY = 500;
+
       charKeys.add('d');
     }
 
@@ -463,29 +462,50 @@ public class Sketch extends PApplet {
       intCharX -= intSpeedX;
       blnAtk = false;
 
+      intCharY = 500;
+
       charKeys.add('a');
     }
 
     else if(blnJump){
-      System.out.println(intCharY);
-      System.out.println(fltAngle);
+      if(charKeys.get(charKeys.size() - 1) == 'd'){
+        image(imgScytheRestRight, intCharX - 80, intCharY);
+        image(imgStandRight, intCharX, intCharY);
 
-      image(imgStandRight, intCharX, intCharY);
-      fltCharJumpX = fltAngle; 
-      fltCharJumpY = (float) (Math.pow(fltAngle, 2) - (3 * fltAngle));
+        fltCharJumpX = fltAngle; 
+        fltCharJumpY = (float) (Math.pow(fltAngle, 2) - (4 * fltAngle));
 
-      intCharX += fltCharJumpX;
-      intCharY += fltCharJumpY;
+        intCharX += fltCharJumpX;
+        intCharY += fltCharJumpY;
+      }
+
+      else if(charKeys.get(charKeys.size() - 1) == 'a'){
+        image(imgScytheRestLeft, intCharX + 80, intCharY);
+        image(imgStandLeft, intCharX, intCharY);
+
+        fltCharJumpX = fltAngle; 
+        fltCharJumpY = (float) (Math.pow(fltAngle, 2) - (4 * fltAngle));
+
+        intCharX -= fltCharJumpX;
+        intCharY += fltCharJumpY;
+      }
 
       fltAngle += 0.1;
+      blnAtk = false;
 
-      if(fltAngle > 4.7){
+      if(fltAngle > 6.1){
+        intCharY = 500;
         fltAngle = 0;
+        blnJump = false;
       }
     }
 
     // Character resting
     else{
+      intCharY = 500; 
+      fltAngle = 0;
+      blnJump = false;
+
       if(charKeys.get(charKeys.size() - 1) == 'd'){
         if(!blnAtk){
           image(imgScytheRestRight, intCharX - 80, intCharY);
@@ -503,7 +523,7 @@ public class Sketch extends PApplet {
       }
     }
 
-    // prune();
+    prune();
 
     // Attack animation
     if(blnAtk){
@@ -560,8 +580,11 @@ public class Sketch extends PApplet {
 
         if(intClickX.get(intClickX.size() - 1) >= 620 && intClickX.get(intClickX.size() - 1) <= 880){
           if(intClickY.get(intClickY.size() - 1) >= 500 && intClickY.get(intClickY.size() - 1) <= 580){
-            intCharX = 50;
             intLives = 10;
+            intCharX = 50;
+            intCharY = 500;
+            blnAtk = false;
+            blnJump = false;
             intLvl = 1;
 
             charKeys.add('d');
@@ -591,7 +614,10 @@ public class Sketch extends PApplet {
         if(intClickX.get(intClickX.size() - 1) >= 640 && intClickX.get(intClickX.size() - 1) <= 860){
           if(intClickY.get(intClickY.size() - 1) >= 630 && intClickY.get(intClickY.size() - 1) <= 710){
             intLives = 10;
-            intCharX = 50;            
+            intCharX = 50;
+            intCharY = 500;
+            blnAtk = false;
+            blnJump = false;            
             intLvl = 0;
 
             charKeys.add('d');
@@ -630,7 +656,10 @@ public class Sketch extends PApplet {
         if(intClickX.get(intClickX.size() - 1) >= 620 && intClickX.get(intClickX.size() - 1) <= 880){
           if(intClickY.get(intClickY.size() - 1) >= 440 && intClickY.get(intClickY.size() - 1) <= 520){            
             intLives = 10;
-            intCharX = 50;            
+            intCharX = 50;
+            intCharY = 500;
+            blnAtk = false;
+            blnJump = false;            
             intLvl = 1;
 
             charKeys.add('d');
@@ -660,7 +689,10 @@ public class Sketch extends PApplet {
         if(intClickX.get(intClickX.size() - 1) >= 640 && intClickX.get(intClickX.size() - 1) <= 860){
           if(intClickY.get(intClickY.size() - 1) >= 570 && intClickY.get(intClickY.size() - 1) <= 650){
             intLives = 10;
-            intCharX = 50;            
+            intCharX = 50;
+            intCharY = 500;
+            blnAtk = false;
+            blnJump = false;            
             intLvl = 0;
 
             charKeys.add('d');
@@ -772,7 +804,7 @@ public class Sketch extends PApplet {
       }
       
       // Losing hearts
-      if((pruneArmyX[i] + 70) >= intCharX + 90 && (pruneArmyX[i] + 70) <= intCharX + 100){
+      if(((pruneArmyX[i] + 70) >= intCharX + 90 && (pruneArmyX[i] + 70) <= intCharX + 100) && pruneArmyY[i] == intCharY){
         intLives--; 
       }
     }
