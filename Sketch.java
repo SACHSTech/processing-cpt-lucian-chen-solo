@@ -4,11 +4,20 @@ import processing.core.PImage;
 
 public class Sketch extends PApplet {
   PImage imgBackground;
+
   PImage imgMenu;
   PImage imgStart;
   PImage imgTut;
   PImage imgGal;
+
   PImage imgGameOver;
+  PImage imgOverMenu;
+  PImage imgOverRestart;
+
+  PImage imgPause;
+  PImage imgRestart;
+  PImage imgResume;
+  PImage imgPMenu;
 
   PImage imgHeart;
 
@@ -54,7 +63,7 @@ public class Sketch extends PApplet {
   int intSpeedX = 15;
   int intSpeedY = 40;
 
-  int intLives = 10;
+  int intLives = 0;
 
   boolean blnRight = false;
   boolean blnLeft = false;
@@ -68,7 +77,7 @@ public class Sketch extends PApplet {
   PImage[] imgRightAttack = new PImage[9];
   PImage[] imgLeftAttack = new PImage[9];
 
-  float[] pruneArmyX = new float[1];
+  float[] pruneArmyX = new float[5];
   float[] pruneArmyY = new float[5];
   int[] pruneSpeed = new int[5];
   float[] pruneHealth = new float[5];
@@ -76,6 +85,8 @@ public class Sketch extends PApplet {
 
   PImage[] imgPruneLeftMove = new PImage[9];
   PImage[] imgPruneRightMove = new PImage[9];
+
+  float[] fltSpawn = new float[5];
 
   int intFrame = 0;
   int intAtkFrame = 0;
@@ -85,7 +96,7 @@ public class Sketch extends PApplet {
   ArrayList<Integer> intClickX = new ArrayList<Integer>();
   ArrayList<Integer> intClickY = new ArrayList<Integer>();
 
-  int intLvl = 1;
+  int intLvl = 0;
 
   public void settings() {
     size(1500, 750);
@@ -103,6 +114,18 @@ public class Sketch extends PApplet {
     imgGal = loadImage("gallery select.png");
 
     imgGameOver = loadImage("game over.png");
+
+    imgOverMenu = loadImage("over menu select.png");
+
+    imgOverRestart = loadImage("over restart select.png");
+
+    imgPause = loadImage("paused.png");
+
+    imgResume = loadImage("resume select.png");
+
+    imgRestart = loadImage("restart select.png");
+
+    imgPMenu = loadImage("menu select.png");
 
     imgHeart = loadImage("heart.png");
     imgHeart.resize(50, 50);
@@ -259,13 +282,13 @@ public class Sketch extends PApplet {
     intClickX.add(0);
     intClickY.add(0);
 
-    // Sets the location, speed, and health of all prunes
+    // Sets the starting location, speed, and health of all prunes
     for (int i = 0; i < pruneArmyX.length; i++) {
-      pruneArmyX[i] = random(1000, 1400);
+      pruneArmyX[i] = -1000;
       pruneArmyY[i] = 550;
       pruneSpeed[i] = 10;
       pruneHealth[i] = 100;
-      blnDrawPrune[i] = true;
+      blnDrawPrune[i] = false;
     }
   }
 
@@ -276,6 +299,9 @@ public class Sketch extends PApplet {
 
     else if(intLvl == 1){
       gameLvl();
+
+      intClickX.add(0);
+      intClickY.add(0);
     }
 
     else if(intLvl == 2){
@@ -291,7 +317,7 @@ public class Sketch extends PApplet {
     }
 
     if(intLives <= 0){
-      image(imgGameOver, 0, 0);
+      gameOver();
     }
   }
 
@@ -320,13 +346,6 @@ public class Sketch extends PApplet {
     // Pause
     if(intLvl == 1 && key == 'x'){
       intLvl = 4;
-      intClickX.add(0);
-      intClickY.add(0);
-    }
-
-    // Resume
-    if(intLvl == 4 && key == 'r'){
-      intLvl = 1;
       intClickX.add(0);
       intClickY.add(0);
     }
@@ -360,7 +379,7 @@ public class Sketch extends PApplet {
   public void startMenu(){
     image(imgMenu, 0, 0);
 
-    // Start select
+    // Start
     if(mouseX >= 660 && mouseX <= 840){
       if(mouseY >= 320 && mouseY <= 400){
         image(imgStart, 0, 0);
@@ -373,7 +392,7 @@ public class Sketch extends PApplet {
       }
     }
 
-    // Tutorial select
+    // Tutorial 
     if(mouseX >= 620 && mouseX <= 890){
       if(mouseY >= 460 && mouseY <= 540){
         image(imgTut, 0, 0);
@@ -386,7 +405,7 @@ public class Sketch extends PApplet {
       }
     }
 
-    // Gallery select
+    // Gallery 
     if(mouseX >= 630 && mouseX <= 870){
       if(mouseY >= 600 && mouseY <= 680){
         image(imgGal, 0, 0);
@@ -494,7 +513,86 @@ public class Sketch extends PApplet {
   }
 
   public void pauseMenu(){
-    image(imgBackground, 0, 0);
+    image(imgPause, 0, 0);
+
+    // Resume
+    if(mouseX >= 615 && mouseX <= 885){
+      if(mouseY >= 370 && mouseY <= 450){
+        image(imgResume, 0, 0);
+
+        if(intClickX.get(intClickX.size() - 1) >= 615 && intClickX.get(intClickX.size() - 1) <= 885){
+          if(intClickY.get(intClickY.size() - 1) >= 370 && intClickY.get(intClickY.size() - 1) <= 450){
+            intLvl = 1;
+          }
+        }
+      }
+    }
+
+    // Restart
+    if(mouseX >= 620 && mouseX <= 880){
+      if(mouseY >= 500 && mouseY <= 580){
+        image(imgRestart, 0, 0);
+
+        if(intClickX.get(intClickX.size() - 1) >= 620 && intClickX.get(intClickX.size() - 1) <= 880){
+          if(intClickY.get(intClickY.size() - 1) >= 500 && intClickY.get(intClickY.size() - 1) <= 580){
+            intLvl = 1;
+          }
+        }
+      }
+    }
+
+    // Menu
+    if(mouseX >= 640 && mouseX <= 860){
+      if(mouseY >= 630 && mouseY <= 710){
+        image(imgPMenu, 0, 0);
+
+        if(intClickX.get(intClickX.size() - 1) >= 640 && intClickX.get(intClickX.size() - 1) <= 860){
+          if(intClickY.get(intClickY.size() - 1) >= 630 && intClickY.get(intClickY.size() - 1) <= 710){
+            intLvl = 0;
+
+            intClickX.add(0);
+            intClickY.add(0);
+          }
+        }
+      }
+    }
+  }
+
+  public void gameOver(){
+    intLvl = 5;
+    
+    image(imgGameOver, 0 , 0);
+  
+    // Restart
+    if(mouseX >= 620 && mouseX <= 880){
+      if(mouseY >= 440 && mouseY <= 520){
+        image(imgOverRestart, 0, 0);
+
+        if(intClickX.get(intClickX.size() - 1) >= 620 && intClickX.get(intClickX.size() - 1) <= 880){
+          if(intClickY.get(intClickY.size() - 1) >= 440 && intClickY.get(intClickY.size() - 1) <= 520){            
+            intLvl = 1;
+            intLives = 10;
+          }
+        }
+      }
+    }
+
+    // Menu
+    if(mouseX >= 640 && mouseX <= 860){
+      if(mouseY >= 570 && mouseY <= 650){
+        image(imgOverMenu, 0, 0);
+
+        if(intClickX.get(intClickX.size() - 1) >= 640 && intClickX.get(intClickX.size() - 1) <= 860){
+          if(intClickY.get(intClickY.size() - 1) >= 570 && intClickY.get(intClickY.size() - 1) <= 650){
+            intLvl = 0;
+            intLives = 10;
+
+            intClickX.add(0);
+            intClickY.add(0);
+          }
+        }
+      }
+    }
   }
 
   // All interactions with prunes
@@ -515,16 +613,16 @@ public class Sketch extends PApplet {
 
       // Prune health lose
       if(charKeys.get(charKeys.size() - 1) == 'd' && blnAtk){
-        if(((intCharX + 200 >= pruneArmyX[i] + 10) && (intCharX + 250 <= pruneArmyX[i] + 120)) && pruneHealth[i] > 0 && intAtkFrame == 1){
+        if(((intCharX + 200 >= pruneArmyX[i] - 10) && (intCharX + 250 <= pruneArmyX[i] + 140)) && pruneHealth[i] > 0 && intAtkFrame == 1){
           pruneHealth[i] = pruneHealth[i] - 10;
-          pruneArmyX[i] = pruneArmyX[i] + 50;
+          pruneArmyX[i] = pruneArmyX[i] + 70;
         }
       }
 
       if(charKeys.get(charKeys.size() - 1) == 'a' && blnAtk){
-        if(((intCharX - 50 >= pruneArmyX[i] + 10) && (intCharX <= pruneArmyX[i] + 120)) && pruneHealth[i] > 0 && intAtkFrame == 1){
+        if(((intCharX - 50 >= pruneArmyX[i] - 10) && (intCharX <= pruneArmyX[i] + 140)) && pruneHealth[i] > 0 && intAtkFrame == 1){
           pruneHealth[i] = pruneHealth[i] - 10;
-          pruneArmyX[i] = pruneArmyX[i] - 50;
+          pruneArmyX[i] = pruneArmyX[i] - 70;
         }
       }
 
@@ -532,7 +630,7 @@ public class Sketch extends PApplet {
         blnDrawPrune[i] = false;
       }
 
-      // Checks to see if prune has health
+      // Checks to see if prune should be drawm
       if(blnDrawPrune[i]){
         // Left or right facing
         if(pruneSpeed[i] > 0){
@@ -552,6 +650,20 @@ public class Sketch extends PApplet {
 
         else if(pruneArmyX[i] >= intCharX - 50 && pruneArmyX[i] <= intCharX + 50 && pruneSpeed[i] < 0){
           image(imgPruneRightAtk, pruneArmyX[i], pruneArmyY[i]);
+        }
+      }
+
+      // Draws prune by chance
+      else{
+        fltSpawn[i] = random(2);
+
+        if(fltSpawn[i] < 0.05){
+          blnDrawPrune[i] = true;
+          pruneArmyX[i] = random(1000, 1500);
+        }
+
+        else{
+          pruneArmyX[i] = -1000;
         }
       }
 
