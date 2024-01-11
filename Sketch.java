@@ -63,7 +63,12 @@ public class Sketch extends PApplet {
   int intSpeedX = 15;
   int intSpeedY = 40;
 
-  int intLives = 0;
+  float fltCharJumpX;
+  float fltCharJumpY;
+
+  float fltAngle = 0;
+
+  int intLives = 10;
 
   boolean blnRight = false;
   boolean blnLeft = false;
@@ -332,8 +337,9 @@ public class Sketch extends PApplet {
       blnAtk = false;
     }
 
-    if(key == ' '){
+    if(key == 'j'){
       blnJump = true;
+      blnAtk = false;
     }
 
     // Return to menu
@@ -362,8 +368,9 @@ public class Sketch extends PApplet {
       blnAtk = false;
     }
 
-    if(key == ' '){
+    if(key == 'j'){
       blnJump = false;
+      blnAtk = false;
     }
   }
 
@@ -459,6 +466,24 @@ public class Sketch extends PApplet {
       charKeys.add('a');
     }
 
+    else if(blnJump){
+      System.out.println(intCharY);
+      System.out.println(fltAngle);
+
+      image(imgStandRight, intCharX, intCharY);
+      fltCharJumpX = fltAngle; 
+      fltCharJumpY = (float) (Math.pow(fltAngle, 2) - (3 * fltAngle));
+
+      intCharX += fltCharJumpX;
+      intCharY += fltCharJumpY;
+
+      fltAngle += 0.1;
+
+      if(fltAngle > 4.7){
+        fltAngle = 0;
+      }
+    }
+
     // Character resting
     else{
       if(charKeys.get(charKeys.size() - 1) == 'd'){
@@ -478,7 +503,7 @@ public class Sketch extends PApplet {
       }
     }
 
-    prune();
+    // prune();
 
     // Attack animation
     if(blnAtk){
@@ -535,7 +560,24 @@ public class Sketch extends PApplet {
 
         if(intClickX.get(intClickX.size() - 1) >= 620 && intClickX.get(intClickX.size() - 1) <= 880){
           if(intClickY.get(intClickY.size() - 1) >= 500 && intClickY.get(intClickY.size() - 1) <= 580){
+            intCharX = 50;
+            intLives = 10;
             intLvl = 1;
+
+            charKeys.add('d');
+
+            for (int i = 0; i < pruneArmyX.length; i++) {
+              pruneArmyX[i] = -1000;
+              pruneHealth[i] = 100;
+              blnDrawPrune[i] = false;
+
+              fltSpawn[i] = random(2);
+
+              if(fltSpawn[i] < 0.05){
+                blnDrawPrune[i] = true;
+                pruneArmyX[i] = random(1000, 1500);
+              }
+            }
           }
         }
       }
@@ -548,10 +590,27 @@ public class Sketch extends PApplet {
 
         if(intClickX.get(intClickX.size() - 1) >= 640 && intClickX.get(intClickX.size() - 1) <= 860){
           if(intClickY.get(intClickY.size() - 1) >= 630 && intClickY.get(intClickY.size() - 1) <= 710){
+            intLives = 10;
+            intCharX = 50;            
             intLvl = 0;
+
+            charKeys.add('d');
 
             intClickX.add(0);
             intClickY.add(0);
+
+            for (int i = 0; i < pruneArmyX.length; i++) {
+              pruneArmyX[i] = -1000;
+              pruneHealth[i] = 100;
+              blnDrawPrune[i] = false;
+
+              fltSpawn[i] = random(2);
+
+              if(fltSpawn[i] < 0.05){
+                blnDrawPrune[i] = true;
+                pruneArmyX[i] = random(1000, 1500);
+              }
+            }
           }
         }
       }
@@ -570,8 +629,24 @@ public class Sketch extends PApplet {
 
         if(intClickX.get(intClickX.size() - 1) >= 620 && intClickX.get(intClickX.size() - 1) <= 880){
           if(intClickY.get(intClickY.size() - 1) >= 440 && intClickY.get(intClickY.size() - 1) <= 520){            
-            intLvl = 1;
             intLives = 10;
+            intCharX = 50;            
+            intLvl = 1;
+
+            charKeys.add('d');
+
+            for (int i = 0; i < pruneArmyX.length; i++) {
+              pruneArmyX[i] = -1000;
+              pruneHealth[i] = 100;
+              blnDrawPrune[i] = false;
+
+              fltSpawn[i] = random(2);
+
+              if(fltSpawn[i] < 0.05){
+                blnDrawPrune[i] = true;
+                pruneArmyX[i] = random(1000, 1500);
+              }
+            }
           }
         }
       }
@@ -584,11 +659,27 @@ public class Sketch extends PApplet {
 
         if(intClickX.get(intClickX.size() - 1) >= 640 && intClickX.get(intClickX.size() - 1) <= 860){
           if(intClickY.get(intClickY.size() - 1) >= 570 && intClickY.get(intClickY.size() - 1) <= 650){
-            intLvl = 0;
             intLives = 10;
+            intCharX = 50;            
+            intLvl = 0;
+
+            charKeys.add('d');
 
             intClickX.add(0);
             intClickY.add(0);
+
+            for (int i = 0; i < pruneArmyX.length; i++) {
+              pruneArmyX[i] = -1000;
+              pruneHealth[i] = 100;
+              blnDrawPrune[i] = false;
+
+              fltSpawn[i] = random(2);
+
+              if(fltSpawn[i] < 0.05){
+                blnDrawPrune[i] = true;
+                pruneArmyX[i] = random(1000, 1500);
+              }
+            }
           }
         }
       }
