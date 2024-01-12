@@ -444,6 +444,7 @@ public class Sketch extends PApplet {
       intCharX += intSpeedX;
       blnAtk = false;
 
+      fltAngle = 0;
       intCharY = 500;
 
       charKeys.add('d');
@@ -462,6 +463,7 @@ public class Sketch extends PApplet {
       intCharX -= intSpeedX;
       blnAtk = false;
 
+      fltAngle = 0;
       intCharY = 500;
 
       charKeys.add('a');
@@ -472,8 +474,8 @@ public class Sketch extends PApplet {
         image(imgScytheRestRight, intCharX - 80, intCharY);
         image(imgStandRight, intCharX, intCharY);
 
-        fltCharJumpX = fltAngle; 
-        fltCharJumpY = (float) (Math.pow(fltAngle, 2) - (4 * fltAngle));
+        fltCharJumpX = fltAngle + 5; 
+        fltCharJumpY = (float) (Math.pow(fltAngle, 2) - (4 * fltAngle)) - 20;
 
         intCharX += fltCharJumpX;
         intCharY += fltCharJumpY;
@@ -483,17 +485,17 @@ public class Sketch extends PApplet {
         image(imgScytheRestLeft, intCharX + 80, intCharY);
         image(imgStandLeft, intCharX, intCharY);
 
-        fltCharJumpX = fltAngle; 
-        fltCharJumpY = (float) (Math.pow(fltAngle, 2) - (4 * fltAngle));
+        fltCharJumpX = fltAngle + 5; 
+        fltCharJumpY = (float) (Math.pow(fltAngle, 2) - (4 * fltAngle)) - 20;
 
         intCharX -= fltCharJumpX;
         intCharY += fltCharJumpY;
       }
 
-      fltAngle += 0.1;
+      fltAngle += 1;
       blnAtk = false;
 
-      if(fltAngle > 6.1){
+      if(fltAngle > 11){
         intCharY = 500;
         fltAngle = 0;
         blnJump = false;
@@ -804,8 +806,10 @@ public class Sketch extends PApplet {
       }
       
       // Losing hearts
-      if(((pruneArmyX[i] + 70) >= intCharX + 90 && (pruneArmyX[i] + 70) <= intCharX + 100) && pruneArmyY[i] == intCharY){
-        intLives--; 
+      if(pruneArmyX[i] + 70 >= intCharX + 90 && pruneArmyX[i] + 70 <= intCharX + 100){
+        if(pruneArmyY[i] + 50 >= intCharY + 100 && pruneArmyY[i] + 50 <= intCharY + 200){
+          intLives--; 
+        }
       }
     }
   }
