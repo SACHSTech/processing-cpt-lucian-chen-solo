@@ -29,6 +29,11 @@ public class Sketch extends PApplet {
   PImage imgPruneRight2;
   PImage imgPruneRightAtk;
 
+  PImage imgJellyBody;
+  PImage imgJellyLegs1;
+  PImage imgJellyLegs2;
+  PImage imgJellyAtk;
+
   PImage imgScytheRestRight;
   PImage imgScytheRestLeft;
 
@@ -70,6 +75,8 @@ public class Sketch extends PApplet {
 
   int intLives = 10;
 
+  int intAtkInterval = 8000;
+
   boolean blnRight = false;
   boolean blnLeft = false;
   boolean blnJump = false;
@@ -82,6 +89,7 @@ public class Sketch extends PApplet {
   PImage[] imgRightAttack = new PImage[9];
   PImage[] imgLeftAttack = new PImage[9];
 
+  // Prune
   float[] pruneArmyX = new float[5];
   float[] pruneArmyY = new float[5];
   int[] pruneSpeed = new int[5];
@@ -91,11 +99,25 @@ public class Sketch extends PApplet {
   PImage[] imgPruneLeftMove = new PImage[9];
   PImage[] imgPruneRightMove = new PImage[9];
 
-  float[] fltSpawn = new float[5];
+  float[] fltPruneSpawn = new float[5];
+
+  // Jelly
+  float[] jellyArmyX = new float[5];
+  float[] jellyArmyY = new float[5];
+  int[] jellySpeed = new int[5];
+  float[] jellyHealth = new float[5];
+  boolean[] blnDrawJelly = new boolean[5];
+
+  PImage[] imgJellyMove = new PImage[9];
+
+  float[] fltJellySpawn = new float[5];
+
+  int[] jellyAtkInterval = new int [5];
 
   int intFrame = 0;
   int intAtkFrame = 0;
   int intPruneFrame = 0;
+  int intJellyFrame = 0;
 
   ArrayList<Character> charKeys = new ArrayList<Character>();
   ArrayList<Integer> intClickX = new ArrayList<Integer>();
@@ -154,6 +176,20 @@ public class Sketch extends PApplet {
     imgPruneRightAtk = loadImage("pruneRightAtk.png");
     imgPruneRightAtk.resize(150, 150);
 
+    // Jelly
+    imgJellyBody = loadImage("jelly body.png");
+    imgJellyBody.resize(150, 150);
+
+    imgJellyLegs1 = loadImage("jelly legs1.png");
+    imgJellyLegs1.resize(150, 150);
+
+    imgJellyLegs2 = loadImage("jelly legs2.png");
+    imgJellyLegs2.resize(150, 150);
+
+    imgJellyAtk = loadImage("jellyAtk.png");
+    imgJellyAtk.resize(150, 150);
+
+    // Scythe
     imgScytheRestRight = loadImage("scythe rest right.png");
     imgScytheRestRight.resize(200, 200);
 
@@ -279,6 +315,16 @@ public class Sketch extends PApplet {
     imgPruneRightMove[6] = imgPruneRight1;
     imgPruneRightMove[7] = imgPruneRight2;
     imgPruneRightMove[8] = imgPruneRight1;
+
+    imgJellyMove[0] = imgJellyLegs1;
+    imgJellyMove[1] = imgJellyLegs2;
+    imgJellyMove[2] = imgJellyLegs1;
+    imgJellyMove[3] = imgJellyLegs2;
+    imgJellyMove[4] = imgJellyLegs1;
+    imgJellyMove[5] = imgJellyLegs2;
+    imgJellyMove[6] = imgJellyLegs1;
+    imgJellyMove[7] = imgJellyLegs2;
+    imgJellyMove[8] = imgJellyLegs1;
     
     frameRate(9);
 
@@ -294,6 +340,16 @@ public class Sketch extends PApplet {
       pruneSpeed[i] = 10;
       pruneHealth[i] = 100;
       blnDrawPrune[i] = false;
+    }
+
+    // Sets the starting location, speed, and health of all jellies
+    for (int i = 0; i < jellyArmyX.length; i++) {
+      jellyArmyX[i] = -1000;
+      jellyArmyY[i] = 550;
+      jellySpeed[i] = 15;
+      jellyHealth[i] = 70;
+      jellyAtkInterval[i] = 0;
+      blnDrawJelly[i] = false;
     }
   }
 
@@ -525,7 +581,8 @@ public class Sketch extends PApplet {
       }
     }
 
-    prune();
+    //prune();
+    jelly();
 
     // Attack animation
     if(blnAtk){
@@ -596,11 +653,24 @@ public class Sketch extends PApplet {
               pruneHealth[i] = 100;
               blnDrawPrune[i] = false;
 
-              fltSpawn[i] = random(2);
+              fltPruneSpawn[i] = random(2);
 
-              if(fltSpawn[i] < 0.05){
+              if(fltPruneSpawn[i] < 0.05){
                 blnDrawPrune[i] = true;
                 pruneArmyX[i] = random(1000, 1500);
+              }
+            }
+
+            for (int i = 0; i < jellyArmyX.length; i++) {
+              jellyArmyX[i] = -1000;
+              jellyHealth[i] = 100;
+              blnDrawJelly[i] = false;
+
+              fltJellySpawn[i] = random(2);
+
+              if(fltJellySpawn[i] < 0.05){
+                blnDrawJelly[i] = true;
+                jellyArmyX[i] = random(1000, 1500);
               }
             }
           }
@@ -632,11 +702,24 @@ public class Sketch extends PApplet {
               pruneHealth[i] = 100;
               blnDrawPrune[i] = false;
 
-              fltSpawn[i] = random(2);
+              fltPruneSpawn[i] = random(2);
 
-              if(fltSpawn[i] < 0.05){
+              if(fltPruneSpawn[i] < 0.05){
                 blnDrawPrune[i] = true;
                 pruneArmyX[i] = random(1000, 1500);
+              }
+            }
+
+            for (int i = 0; i < jellyArmyX.length; i++) {
+              jellyArmyX[i] = -1000;
+              jellyHealth[i] = 100;
+              blnDrawJelly[i] = false;
+
+              fltJellySpawn[i] = random(2);
+
+              if(fltJellySpawn[i] < 0.05){
+                blnDrawJelly[i] = true;
+                jellyArmyX[i] = random(1000, 1500);
               }
             }
           }
@@ -671,11 +754,24 @@ public class Sketch extends PApplet {
               pruneHealth[i] = 100;
               blnDrawPrune[i] = false;
 
-              fltSpawn[i] = random(2);
+              fltPruneSpawn[i] = random(2);
 
-              if(fltSpawn[i] < 0.05){
+              if(fltPruneSpawn[i] < 0.05){
                 blnDrawPrune[i] = true;
                 pruneArmyX[i] = random(1000, 1500);
+              }
+            }
+
+            for (int i = 0; i < jellyArmyX.length; i++) {
+              jellyArmyX[i] = -1000;
+              jellyHealth[i] = 100;
+              blnDrawJelly[i] = false;
+
+              fltJellySpawn[i] = random(2);
+
+              if(fltJellySpawn[i] < 0.05){
+                blnDrawJelly[i] = true;
+                jellyArmyX[i] = random(1000, 1500);
               }
             }
           }
@@ -707,11 +803,24 @@ public class Sketch extends PApplet {
               pruneHealth[i] = 100;
               blnDrawPrune[i] = false;
 
-              fltSpawn[i] = random(2);
+              fltPruneSpawn[i] = random(2);
 
-              if(fltSpawn[i] < 0.05){
+              if(fltPruneSpawn[i] < 0.05){
                 blnDrawPrune[i] = true;
                 pruneArmyX[i] = random(1000, 1500);
+              }
+            }
+
+            for (int i = 0; i < jellyArmyX.length; i++) {
+              jellyArmyX[i] = -1000;
+              jellyHealth[i] = 100;
+              blnDrawJelly[i] = false;
+
+              fltJellySpawn[i] = random(2);
+
+              if(fltJellySpawn[i] < 0.05){
+                blnDrawJelly[i] = true;
+                jellyArmyX[i] = random(1000, 1500);
               }
             }
           }
@@ -780,9 +889,9 @@ public class Sketch extends PApplet {
 
       // Draws prune by chance
       else{
-        fltSpawn[i] = random(2);
+        fltPruneSpawn[i] = random(2);
 
-        if(fltSpawn[i] < 0.05){
+        if(fltPruneSpawn[i] < 0.05){
           blnDrawPrune[i] = true;
           pruneArmyX[i] = random(1000, 1500);
         }
@@ -809,6 +918,108 @@ public class Sketch extends PApplet {
       if(pruneArmyX[i] + 70 >= intCharX + 90 && pruneArmyX[i] + 70 <= intCharX + 100){
         if(pruneArmyY[i] + 50 >= intCharY + 100 && pruneArmyY[i] + 50 <= intCharY + 200){
           intLives--; 
+        }
+      }
+    }
+  }
+
+  // All interactions with jellies
+  public void jelly(){
+    intJellyFrame++;
+    intJellyFrame %= imgJellyMove.length;
+
+    for(int i = 0; i < jellyArmyX.length; i++){
+      // Jelly healthbar
+      stroke(255);
+      fill(135, 219, 121);
+
+      if(jellyHealth[i] == 0){
+        noStroke();
+      }
+
+      rect(jellyArmyX[i] + 25, jellyArmyY[i], 1 * jellyHealth[i], 25);
+
+      // Jelly health lose
+      if(charKeys.get(charKeys.size() - 1) == 'd' && blnAtk){
+        if(((intCharX + 200 >= jellyArmyX[i] - 10) && (intCharX + 250 <= jellyArmyX[i] + 140)) && jellyHealth[i] > 0 && intAtkFrame == 1){
+          jellyHealth[i] = jellyHealth[i] - 10;
+          jellyArmyX[i] = jellyArmyX[i] + 70;
+        }
+      }
+
+      if(charKeys.get(charKeys.size() - 1) == 'a' && blnAtk){
+        if(((intCharX - 50 >= jellyArmyX[i] - 10) && (intCharX <= jellyArmyX[i] + 140)) && jellyHealth[i] > 0 && intAtkFrame == 1){
+          jellyHealth[i] = jellyHealth[i] - 10;
+          jellyArmyX[i] = jellyArmyX[i] - 70;
+        }
+      }
+
+      if(jellyHealth[i] <= 0){
+        blnDrawJelly[i] = false;
+      }
+
+      // Checks to see if jelly should be drawm
+      if(blnDrawJelly[i]){
+        if(jellySpeed[i] > 0){
+          image(imgJellyMove[intJellyFrame], jellyArmyX[i] - 10, jellyArmyY[i]);
+        }
+
+        else if(jellySpeed[i] < 0){
+          image(imgJellyMove[intJellyFrame], jellyArmyX[i] + 10, jellyArmyY[i]);
+        }
+        
+        jellyArmyX[i] -= jellySpeed[i];
+
+        if(jellyArmyX[i] >= intCharX + 20 && jellyArmyX[i] <= intCharX + 100 && jellySpeed[i] > 0){
+          image(imgJellyAtk, jellyArmyX[i], jellyArmyY[i]);
+        }
+
+        else if(jellyArmyX[i] >= intCharX - 50 && jellyArmyX[i] <= intCharX + 50 && jellySpeed[i] < 0){
+          image(imgJellyAtk, jellyArmyX[i], jellyArmyY[i]);
+        }
+
+        else{
+          image(imgJellyBody, jellyArmyX[i], jellyArmyY[i]);
+        }
+      }
+
+      // Draws jelly by chance
+      else{
+        fltJellySpawn[i] = random(2);
+
+        if(fltJellySpawn[i] < 0.05){
+          blnDrawJelly[i] = true;
+          jellyArmyX[i] = random(1000, 1500);
+        }
+
+        else{
+          jellyArmyX[i] = -1000;
+        }
+      }
+
+      // Keeps jelly in bounds and hones the player
+      if(jellyArmyX[i] <= -20 || jellyArmyX[i] >= 1400){
+        jellySpeed[i] = jellySpeed[i] * -1;
+      }
+
+      if(jellyArmyX[i] <= intCharX - 100){
+        jellySpeed[i] = -10;
+      }
+
+      if(jellyArmyX[i] >= intCharX + 150){
+        jellySpeed[i] = 10;
+      }
+      
+      line(intCharX + 50, 500, intCharX + 50, 600);
+      line(intCharX + 150, 500, intCharX + 150, 600);
+      // Losing hearts
+      if(jellyArmyX[i] + 70 >= intCharX + 50 && jellyArmyX[i] + 70 <= intCharX + 150){
+        if(jellyArmyY[i] + 50 >= intCharY + 100 && jellyArmyY[i] + 50 <= intCharY + 200){
+          if(millis() - jellyAtkInterval[i] > intAtkInterval){
+            intLives--;
+
+            intAtkInterval = millis();
+          }
         }
       }
     }
