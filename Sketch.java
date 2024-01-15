@@ -75,8 +75,6 @@ public class Sketch extends PApplet {
 
   int intLives = 10;
 
-  int intAtkInterval = 8000;
-
   boolean blnRight = false;
   boolean blnLeft = false;
   boolean blnJump = false;
@@ -88,7 +86,7 @@ public class Sketch extends PApplet {
 
   PImage[] imgRightAttack = new PImage[9];
   PImage[] imgLeftAttack = new PImage[9];
-
+  
   // Prune
   float[] pruneArmyX = new float[5];
   float[] pruneArmyY = new float[5];
@@ -101,6 +99,9 @@ public class Sketch extends PApplet {
 
   float[] fltPruneSpawn = new float[5];
 
+  int[] pruneAtkCooldown = new int[5];
+  int[] pruneAtkInterval = new int [5];
+
   // Jelly
   float[] jellyArmyX = new float[5];
   float[] jellyArmyY = new float[5];
@@ -112,6 +113,7 @@ public class Sketch extends PApplet {
 
   float[] fltJellySpawn = new float[5];
 
+  int[] jellyAtkCooldown = new int[5];
   int[] jellyAtkInterval = new int [5];
 
   int intFrame = 0;
@@ -339,6 +341,10 @@ public class Sketch extends PApplet {
       pruneArmyY[i] = 550;
       pruneSpeed[i] = 10;
       pruneHealth[i] = 100;
+
+      pruneAtkCooldown[i] = 1500;
+      pruneAtkInterval[i] = 0;
+
       blnDrawPrune[i] = false;
     }
 
@@ -348,7 +354,10 @@ public class Sketch extends PApplet {
       jellyArmyY[i] = 550;
       jellySpeed[i] = 15;
       jellyHealth[i] = 70;
+
+      jellyAtkCooldown[i] = 1500;
       jellyAtkInterval[i] = 0;
+
       blnDrawJelly[i] = false;
     }
   }
@@ -581,7 +590,7 @@ public class Sketch extends PApplet {
       }
     }
 
-    //prune();
+    prune();
     jelly();
 
     // Attack animation
@@ -913,11 +922,14 @@ public class Sketch extends PApplet {
       if(pruneArmyX[i] >= intCharX + 150){
         pruneSpeed[i] = 10;
       }
-      
+
       // Losing hearts
-      if(pruneArmyX[i] + 70 >= intCharX + 90 && pruneArmyX[i] + 70 <= intCharX + 100){
-        if(pruneArmyY[i] + 50 >= intCharY + 100 && pruneArmyY[i] + 50 <= intCharY + 200){
-          intLives--; 
+      if(pruneArmyX[i] + 70 >= intCharX + 50 && pruneArmyX[i] + 70 <= intCharX + 150){
+        if(pruneArmyY[i] + 70 >= intCharY + 100 && pruneArmyY[i] + 70 <= intCharY + 200){
+          if(millis() - pruneAtkInterval[i] > pruneAtkCooldown[i]){
+            intLives--;
+            pruneAtkInterval[i] = millis();
+          }
         }
       }
     }
@@ -1009,16 +1021,13 @@ public class Sketch extends PApplet {
       if(jellyArmyX[i] >= intCharX + 150){
         jellySpeed[i] = 10;
       }
-      
-      line(intCharX + 50, 500, intCharX + 50, 600);
-      line(intCharX + 150, 500, intCharX + 150, 600);
+
       // Losing hearts
       if(jellyArmyX[i] + 70 >= intCharX + 50 && jellyArmyX[i] + 70 <= intCharX + 150){
-        if(jellyArmyY[i] + 50 >= intCharY + 100 && jellyArmyY[i] + 50 <= intCharY + 200){
-          if(millis() - jellyAtkInterval[i] > intAtkInterval){
+        if(jellyArmyY[i] + 70 >= intCharY + 100 && jellyArmyY[i] + 70 <= intCharY + 200){
+          if(millis() - jellyAtkInterval[i] > jellyAtkCooldown[i]){
             intLives--;
-
-            intAtkInterval = millis();
+            jellyAtkInterval[i] = millis();
           }
         }
       }
