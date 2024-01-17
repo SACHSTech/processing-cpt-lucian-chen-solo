@@ -97,10 +97,12 @@ public class Sketch extends PApplet {
   PImage[] imgPruneLeftMove = new PImage[9];
   PImage[] imgPruneRightMove = new PImage[9];
 
-  float[] fltPruneSpawn = new float[5];
+  int[] pruneSpawnCooldown = new int[5];
 
   int[] pruneAtkCooldown = new int[5];
   int[] pruneAtkInterval = new int [5];
+
+  int intPruneSpawn = 1000;
 
   // Jelly
   float[] jellyArmyX = new float[5];
@@ -111,10 +113,12 @@ public class Sketch extends PApplet {
 
   PImage[] imgJellyMove = new PImage[9];
 
-  float[] fltJellySpawn = new float[5];
+  int[] jellySpawnCooldown = new int[5];
 
   int[] jellyAtkCooldown = new int[5];
   int[] jellyAtkInterval = new int [5];
+
+  int intJellySpawn = 1000;
 
   int intFrame = 0;
   int intAtkFrame = 0;
@@ -345,6 +349,8 @@ public class Sketch extends PApplet {
       pruneAtkCooldown[i] = 1500;
       pruneAtkInterval[i] = 0;
 
+      pruneSpawnCooldown[i] = 1000;
+
       blnDrawPrune[i] = false;
     }
 
@@ -357,6 +363,8 @@ public class Sketch extends PApplet {
 
       jellyAtkCooldown[i] = 1500;
       jellyAtkInterval[i] = 0;
+
+      jellySpawnCooldown[i] = 1000;
 
       blnDrawJelly[i] = false;
     }
@@ -661,26 +669,12 @@ public class Sketch extends PApplet {
               pruneArmyX[i] = -1000;
               pruneHealth[i] = 100;
               blnDrawPrune[i] = false;
-
-              fltPruneSpawn[i] = random(2);
-
-              if(fltPruneSpawn[i] < 0.05){
-                blnDrawPrune[i] = true;
-                pruneArmyX[i] = random(1000, 1500);
-              }
             }
 
             for (int i = 0; i < jellyArmyX.length; i++) {
               jellyArmyX[i] = -1000;
-              jellyHealth[i] = 100;
+              jellyHealth[i] = 70;
               blnDrawJelly[i] = false;
-
-              fltJellySpawn[i] = random(2);
-
-              if(fltJellySpawn[i] < 0.05){
-                blnDrawJelly[i] = true;
-                jellyArmyX[i] = random(1000, 1500);
-              }
             }
           }
         }
@@ -710,26 +704,12 @@ public class Sketch extends PApplet {
               pruneArmyX[i] = -1000;
               pruneHealth[i] = 100;
               blnDrawPrune[i] = false;
-
-              fltPruneSpawn[i] = random(2);
-
-              if(fltPruneSpawn[i] < 0.05){
-                blnDrawPrune[i] = true;
-                pruneArmyX[i] = random(1000, 1500);
-              }
             }
 
             for (int i = 0; i < jellyArmyX.length; i++) {
               jellyArmyX[i] = -1000;
-              jellyHealth[i] = 100;
+              jellyHealth[i] = 70;
               blnDrawJelly[i] = false;
-
-              fltJellySpawn[i] = random(2);
-
-              if(fltJellySpawn[i] < 0.05){
-                blnDrawJelly[i] = true;
-                jellyArmyX[i] = random(1000, 1500);
-              }
             }
           }
         }
@@ -762,26 +742,12 @@ public class Sketch extends PApplet {
               pruneArmyX[i] = -1000;
               pruneHealth[i] = 100;
               blnDrawPrune[i] = false;
-
-              fltPruneSpawn[i] = random(2);
-
-              if(fltPruneSpawn[i] < 0.05){
-                blnDrawPrune[i] = true;
-                pruneArmyX[i] = random(1000, 1500);
-              }
             }
 
             for (int i = 0; i < jellyArmyX.length; i++) {
               jellyArmyX[i] = -1000;
-              jellyHealth[i] = 100;
+              jellyHealth[i] = 70;
               blnDrawJelly[i] = false;
-
-              fltJellySpawn[i] = random(2);
-
-              if(fltJellySpawn[i] < 0.05){
-                blnDrawJelly[i] = true;
-                jellyArmyX[i] = random(1000, 1500);
-              }
             }
           }
         }
@@ -811,26 +777,12 @@ public class Sketch extends PApplet {
               pruneArmyX[i] = -1000;
               pruneHealth[i] = 100;
               blnDrawPrune[i] = false;
-
-              fltPruneSpawn[i] = random(2);
-
-              if(fltPruneSpawn[i] < 0.05){
-                blnDrawPrune[i] = true;
-                pruneArmyX[i] = random(1000, 1500);
-              }
             }
 
             for (int i = 0; i < jellyArmyX.length; i++) {
               jellyArmyX[i] = -1000;
-              jellyHealth[i] = 100;
+              jellyHealth[i] = 70;
               blnDrawJelly[i] = false;
-
-              fltJellySpawn[i] = random(2);
-
-              if(fltJellySpawn[i] < 0.05){
-                blnDrawJelly[i] = true;
-                jellyArmyX[i] = random(1000, 1500);
-              }
             }
           }
         }
@@ -873,7 +825,7 @@ public class Sketch extends PApplet {
         blnDrawPrune[i] = false;
       }
 
-      // Checks to see if prune should be drawm
+      // Checks to see if prune is drawn
       if(blnDrawPrune[i]){
         // Left or right facing
         if(pruneSpeed[i] > 0){
@@ -896,17 +848,15 @@ public class Sketch extends PApplet {
         }
       }
 
-      // Draws prune by chance
+      // Spawns prunes in intervals
       else{
-        fltPruneSpawn[i] = random(2);
+        pruneArmyX[i] = -1000;
 
-        if(fltPruneSpawn[i] < 0.05){
+        if(millis() - intPruneSpawn > pruneSpawnCooldown[i]){
           blnDrawPrune[i] = true;
           pruneArmyX[i] = random(1000, 1500);
-        }
 
-        else{
-          pruneArmyX[i] = -1000;
+          intPruneSpawn = millis();
         }
       }
 
@@ -970,7 +920,7 @@ public class Sketch extends PApplet {
         blnDrawJelly[i] = false;
       }
 
-      // Checks to see if jelly should be drawm
+      // Checks to see if jelly is drawn
       if(blnDrawJelly[i]){
         if(jellySpeed[i] > 0){
           image(imgJellyMove[intJellyFrame], jellyArmyX[i] - 10, jellyArmyY[i]);
@@ -995,17 +945,15 @@ public class Sketch extends PApplet {
         }
       }
 
-      // Draws jelly by chance
+      // Spawns jellies in intervals
       else{
-        fltJellySpawn[i] = random(2);
+        jellyArmyX[i] = -1000;
 
-        if(fltJellySpawn[i] < 0.05){
+        if(millis() - intJellySpawn > jellySpawnCooldown[i]){
           blnDrawJelly[i] = true;
           jellyArmyX[i] = random(1000, 1500);
-        }
 
-        else{
-          jellyArmyX[i] = -1000;
+          intJellySpawn = millis();
         }
       }
 
