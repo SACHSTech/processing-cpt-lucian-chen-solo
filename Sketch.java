@@ -75,6 +75,9 @@ public class Sketch extends PApplet {
 
   int intLives = 10;
 
+  int intWinPause = 5000;
+  int intWinInterval = 0; 
+
   boolean blnRight = false;
   boolean blnLeft = false;
   boolean blnJump = false;
@@ -93,6 +96,7 @@ public class Sketch extends PApplet {
   int[] pruneSpeed = new int[5];
   float[] pruneHealth = new float[5];
   boolean[] blnDrawPrune = new boolean[5];
+  boolean blnPruneDone = false;
 
   PImage[] imgPruneLeftMove = new PImage[9];
   PImage[] imgPruneRightMove = new PImage[9];
@@ -111,6 +115,7 @@ public class Sketch extends PApplet {
   int[] jellySpeed = new int[5];
   float[] jellyHealth = new float[5];
   boolean[] blnDrawJelly = new boolean[5];
+  boolean blnJellyDone = false;
 
   PImage[] imgJellyMove = new PImage[9];
 
@@ -399,6 +404,10 @@ public class Sketch extends PApplet {
     if(intLives <= 0){
       gameOver();
     }
+
+    if(blnPruneDone && blnJellyDone){
+      image(imgBackground, 0, 0);
+    }
   }
 
   public void keyPressed(){
@@ -608,8 +617,21 @@ public class Sketch extends PApplet {
       }
     }
 
-    prune();
-    jelly();
+    if(intPrunesKilled < 5){
+      prune();
+    }
+
+    else{
+      blnPruneDone = true;
+    }
+
+    if(intJelliesKilled < 5){
+      jelly();
+    }
+
+    else{
+      blnJellyDone = true;
+    }
 
     // Attack animation
     if(blnAtk){
@@ -762,22 +784,8 @@ public class Sketch extends PApplet {
       if(pruneHealth[i] <= 0){
         blnDrawPrune[i] = false;
 
-        if(intPrunesKilled < 3){
-          if(millis() - intPruneSpawn > pruneSpawnCooldown[i]){
-            blnDrawPrune[i] = true;
-            pruneArmyX[i] = random(1100, 1350);
-  
-            intPruneSpawn = millis();
-  
-            pruneHealth[i] = 100;
-            intPrunesKilled++;
-  
-            System.out.println(intPrunesKilled);
-          }
-        }
-
-        else{
-          blnDrawPrune[i] = false;
+        if(millis() - intPruneSpawn > pruneSpawnCooldown[i]){
+          intPrunesKilled++;
         }
       }
 
@@ -811,8 +819,15 @@ public class Sketch extends PApplet {
         if(millis() - intPruneSpawn > pruneSpawnCooldown[i]){
           blnDrawPrune[i] = true;
           pruneArmyX[i] = random(1100, 1350);
+          pruneHealth[i] = 100;
 
           intPruneSpawn = millis();
+          System.out.println(intPrunesKilled);;
+        }
+
+        if(intPrunesKilled >= 4){
+          pruneArmyX[i] = -1000;
+          pruneSpeed[i] = 0;
         }
       }
 
@@ -827,6 +842,10 @@ public class Sketch extends PApplet {
 
       if(pruneArmyX[i] >= intCharX + 150){
         pruneSpeed[i] = 10;
+      }
+
+      if(pruneArmyX[i] < -400){
+        pruneSpeed[i] = 0;
       }
 
       // Losing hearts
@@ -875,22 +894,8 @@ public class Sketch extends PApplet {
       if(jellyHealth[i] <= 0){
         blnDrawJelly[i] = false;
 
-        if(intJelliesKilled < 3){
-          if(millis() - intJellySpawn > jellySpawnCooldown[i]){
-            blnDrawJelly[i] = true;
-            jellyArmyX[i] = random(1100, 1350);
-  
-            intJellySpawn = millis();
-  
-            jellyHealth[i] = 70;
-            intJelliesKilled++;
-  
-            System.out.println(intJelliesKilled);
-          }
-        }
-
-        else{
-          blnDrawJelly[i] = false;
+        if(millis() - intJellySpawn > jellySpawnCooldown[i]){
+          intJelliesKilled++;
         }
       }
 
@@ -926,8 +931,14 @@ public class Sketch extends PApplet {
         if(millis() - intJellySpawn > jellySpawnCooldown[i]){
           blnDrawJelly[i] = true;
           jellyArmyX[i] = random(1100, 1350);
+          jellyHealth[i] = 70;
 
           intJellySpawn = millis();
+        }
+
+        if(intJelliesKilled >= 4){
+          jellyArmyX[i] = -1000;
+          jellySpeed[i] = 0;
         }
       }
 
@@ -935,13 +946,17 @@ public class Sketch extends PApplet {
       if(jellyArmyX[i] <= -20 || jellyArmyX[i] >= 1400){
         jellySpeed[i] = jellySpeed[i] * -1;
       }
-
+      
       if(jellyArmyX[i] <= intCharX - 100){
         jellySpeed[i] = -10;
       }
 
       if(jellyArmyX[i] >= intCharX + 150){
         jellySpeed[i] = 10;
+      }
+
+      if(jellyArmyX[i] < -400){
+        jellySpeed[i] = 0;
       }
 
       // Losing hearts
