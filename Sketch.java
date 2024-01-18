@@ -17,7 +17,11 @@ public class Sketch extends PApplet {
   PImage imgPause;
   PImage imgRestart;
   PImage imgResume;
-  PImage imgPMenu;
+  PImage imgPauseMenu;
+
+  PImage imgWin;
+  PImage imgAgain;
+  PImage imgWinMenu;
 
   PImage imgHeart;
 
@@ -33,6 +37,12 @@ public class Sketch extends PApplet {
   PImage imgJellyLegs1;
   PImage imgJellyLegs2;
   PImage imgJellyAtk;
+
+  PImage imgBirdRight1;
+  PImage imgBirdRight2; 
+  PImage imgBirdLeft1;
+  PImage imgBirdLeft2;
+  PImage imgEgg;
 
   PImage imgScytheRestRight;
   PImage imgScytheRestLeft;
@@ -127,10 +137,27 @@ public class Sketch extends PApplet {
   int intJellySpawn = 1500;
   int intJelliesKilled = 0;
 
+  // Bird
+  float fltBirdX = -200;
+  float fltBirdY = 120;
+
+  float fltBirdAngle;
+
+  int intBirdSpeed = 15;
+
+  PImage[] imgBirdRightMove = new PImage[9];
+  PImage[] imgBirdLeftMove = new PImage[9];
+
+  int intEggX;
+  int intEggY;
+  int eggDropCooldown = 0;
+  int eggDropInterval = 3000;
+
   int intFrame = 0;
   int intAtkFrame = 0;
   int intPruneFrame = 0;
   int intJellyFrame = 0;
+  int intBirdFrame = 0;
 
   ArrayList<Character> charKeys = new ArrayList<Character>();
   ArrayList<Integer> intClickX = new ArrayList<Integer>();
@@ -165,7 +192,13 @@ public class Sketch extends PApplet {
 
     imgRestart = loadImage("restart select.png");
 
-    imgPMenu = loadImage("menu select.png");
+    imgPauseMenu = loadImage("menu select.png");
+
+    imgWin = loadImage("win.png");
+
+    imgAgain = loadImage("win again select.png");
+
+    imgWinMenu = loadImage("win menu select.png");
 
     imgHeart = loadImage("heart.png");
     imgHeart.resize(50, 50);
@@ -201,6 +234,22 @@ public class Sketch extends PApplet {
 
     imgJellyAtk = loadImage("jellyAtk.png");
     imgJellyAtk.resize(150, 150);
+
+    // Bird
+    imgBirdRight1 = loadImage("birdRight1.png");
+    imgBirdRight1.resize(150, 150);
+
+    imgBirdRight2 = loadImage("birdRight2.png");
+    imgBirdRight2.resize(150, 150);
+
+    imgBirdLeft1 = loadImage("birdLeft1.png");
+    imgBirdLeft1.resize(150, 150);
+
+    imgBirdLeft2 = loadImage("birdLeft2.png");
+    imgBirdLeft2.resize(150, 150);
+
+    imgEgg = loadImage("egg.png");
+    imgEgg.resize(50, 50);
 
     // Scythe
     imgScytheRestRight = loadImage("scythe rest right.png");
@@ -338,6 +387,26 @@ public class Sketch extends PApplet {
     imgJellyMove[6] = imgJellyLegs1;
     imgJellyMove[7] = imgJellyLegs2;
     imgJellyMove[8] = imgJellyLegs1;
+
+    imgBirdRightMove[0] = imgBirdRight1;
+    imgBirdRightMove[1] = imgBirdRight2;
+    imgBirdRightMove[2] = imgBirdRight1;
+    imgBirdRightMove[3] = imgBirdRight2;
+    imgBirdRightMove[4] = imgBirdRight1;
+    imgBirdRightMove[5] = imgBirdRight2;
+    imgBirdRightMove[6] = imgBirdRight1;
+    imgBirdRightMove[7] = imgBirdRight2;
+    imgBirdRightMove[8] = imgBirdRight1;
+
+    imgBirdLeftMove[0] = imgBirdLeft1;
+    imgBirdLeftMove[1] = imgBirdLeft2;
+    imgBirdLeftMove[2] = imgBirdLeft1;
+    imgBirdLeftMove[3] = imgBirdLeft2;
+    imgBirdLeftMove[4] = imgBirdLeft1;
+    imgBirdLeftMove[5] = imgBirdLeft2;
+    imgBirdLeftMove[6] = imgBirdLeft1;
+    imgBirdLeftMove[7] = imgBirdLeft2;
+    imgBirdLeftMove[8] = imgBirdLeft1;
     
     frameRate(9);
 
@@ -406,7 +475,7 @@ public class Sketch extends PApplet {
     }
 
     if(blnPruneDone && blnJellyDone){
-      image(imgBackground, 0, 0);
+      youWin();
     }
   }
 
@@ -633,6 +702,8 @@ public class Sketch extends PApplet {
       blnJellyDone = true;
     }
 
+    bird();
+
     // Attack animation
     if(blnAtk){
       if(charKeys.get(charKeys.size() - 1) == 'd'){
@@ -698,7 +769,7 @@ public class Sketch extends PApplet {
     // Menu
     if(mouseX >= 640 && mouseX <= 860){
       if(mouseY >= 630 && mouseY <= 710){
-        image(imgPMenu, 0, 0);
+        image(imgPauseMenu, 0, 0);
 
         if(intClickX.get(intClickX.size() - 1) >= 640 && intClickX.get(intClickX.size() - 1) <= 860){
           if(intClickY.get(intClickY.size() - 1) >= 630 && intClickY.get(intClickY.size() - 1) <= 710){
@@ -714,8 +785,6 @@ public class Sketch extends PApplet {
   }
 
   public void gameOver(){
-    intLvl = 5;
-    
     image(imgGameOver, 0 , 0);
   
     // Restart
@@ -747,6 +816,73 @@ public class Sketch extends PApplet {
           }
         }
       }
+    }
+  }
+
+  public void youWin(){
+    image(imgWin, 0, 0);
+
+    // Play again
+    if(mouseX >= 555 && mouseX <= 945){
+      if(mouseY >= 440 && mouseY <= 550){
+        image(imgAgain, 0, 0);
+
+        if(intClickX.get(intClickX.size() - 1) >= 555 && intClickX.get(intClickX.size() - 1) <= 945){
+          if(intClickY.get(intClickY.size() - 1) >= 440 && intClickY.get(intClickY.size() - 1) <= 550){            
+            blnPruneDone = false;
+            blnJellyDone = false;
+
+            reset();
+
+            intLvl = 1;
+          }
+        }
+      }
+    }
+
+    // Menu
+    if(mouseX >= 640 && mouseX <= 860){
+      if(mouseY >= 570 && mouseY <= 650){
+        image(imgWinMenu, 0, 0);
+
+        if(intClickX.get(intClickX.size() - 1) >= 640 && intClickX.get(intClickX.size() - 1) <= 860){
+          if(intClickY.get(intClickY.size() - 1) >= 570 && intClickY.get(intClickY.size() - 1) <= 650){
+            blnPruneDone = false;
+            blnJellyDone = false;
+
+            reset();   
+               
+            intLvl = 0;
+            intClickX.add(0);
+            intClickY.add(0);
+          }
+        }
+      }
+    }
+  }
+
+  public void reset(){
+    intLives = 10;
+    intCharX = 50;
+    intCharY = 500;
+    blnAtk = false;
+    blnJump = false;
+
+    intPrunesKilled = 0;
+    intJelliesKilled = 0;
+
+    charKeys.add('d');
+
+    for (int i = 0; i < pruneArmyX.length; i++) {
+      pruneArmyX[i] = -1000;
+      pruneHealth[i] = 100;
+      blnDrawPrune[i] = false;
+    }
+
+    for (int i = 0; i < jellyArmyX.length; i++) {
+      jellyArmyX[i] = -1000;
+      jellyHealth[i] = 70;
+      blnDrawJelly[i] = false;
     }
   }
 
@@ -971,28 +1107,50 @@ public class Sketch extends PApplet {
     }
   }
 
-  public void reset(){
-    intLives = 10;
-    intCharX = 50;
-    intCharY = 500;
-    blnAtk = false;
-    blnJump = false;
+  // All interactions with birds
+  public void bird(){
+    intBirdFrame++;
+    intBirdFrame %= imgBirdLeftMove.length;
 
-    intPrunesKilled = 0;
-    intJelliesKilled = 0;
+    fltBirdX = (fltBirdAngle) * 90; 
+    fltBirdY = 150 + sin(fltBirdAngle) * 60;
 
-    charKeys.add('d');
+    fltBirdAngle += 0.03;
 
-    for (int i = 0; i < pruneArmyX.length; i++) {
-      pruneArmyX[i] = -1000;
-      pruneHealth[i] = 100;
-      blnDrawPrune[i] = false;
+    // Resets the wave once it's out of the screen
+    if (fltBirdAngle > 9.75) {
+      fltBirdAngle = -1;
     }
 
-    for (int i = 0; i < jellyArmyX.length; i++) {
-      jellyArmyX[i] = -1000;
-      jellyHealth[i] = 70;
-      blnDrawJelly[i] = false;
+    // Left or right facing
+    if(intBirdSpeed > 0){
+      image(imgBirdLeftMove[intBirdFrame], fltBirdX, fltBirdY);
+      fltBirdX -= intBirdSpeed;
+    }
+
+    else{
+      image(imgBirdRightMove[intBirdFrame], fltBirdX, fltBirdY);
+      fltBirdX -= intBirdSpeed;
+    }
+
+    // Spawns eggs in intervals
+    if(millis() - eggDropInterval > eggDropCooldown){
+      intEggY--;
+
+      eggDropInterval = millis();
+    }
+
+    // Keeps bird in bounds 
+    if(fltBirdX <= -20 || fltBirdX >= 1400){
+      intBirdSpeed = intBirdSpeed * -1;
+    }
+
+    // Losing hearts
+    if(intEggX + 70 >= intCharX + 50 && intEggX + 70 <= intCharX + 150){
+      if(intEggY + 70 >= intCharY + 110 && intEggY + 70 <= intCharY + 180){
+        intLives--;
+        intEggX = - 1000;
+      }
     }
   }
 }
