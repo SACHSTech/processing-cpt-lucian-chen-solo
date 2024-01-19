@@ -138,20 +138,18 @@ public class Sketch extends PApplet {
   int intJelliesKilled = 0;
 
   // Bird
-  float fltBirdX = -200;
+  float fltBirdX = 1500;
   float fltBirdY = 120;
 
-  float fltBirdAngle;
-
-  int intBirdSpeed = 15;
+  float fltBirdAngle = -3;
 
   PImage[] imgBirdRightMove = new PImage[9];
   PImage[] imgBirdLeftMove = new PImage[9];
 
   int intEggX;
-  int intEggY;
-  int eggDropCooldown = 0;
-  int eggDropInterval = 3000;
+  int intEggY = 200;
+  int eggAtkCooldown = 3000;
+  int eggAtkInterval = 0;
 
   int intFrame = 0;
   int intAtkFrame = 0;
@@ -701,9 +699,10 @@ public class Sketch extends PApplet {
     else{
       blnJellyDone = true;
     }
-
+    
+    egg();
     bird();
-
+    
     // Attack animation
     if(blnAtk){
       if(charKeys.get(charKeys.size() - 1) == 'd'){
@@ -785,6 +784,8 @@ public class Sketch extends PApplet {
   }
 
   public void gameOver(){
+    intLvl = 5;
+
     image(imgGameOver, 0 , 0);
   
     // Restart
@@ -809,7 +810,7 @@ public class Sketch extends PApplet {
         if(intClickX.get(intClickX.size() - 1) >= 640 && intClickX.get(intClickX.size() - 1) <= 860){
           if(intClickY.get(intClickY.size() - 1) >= 570 && intClickY.get(intClickY.size() - 1) <= 650){
             reset();   
-               
+
             intLvl = 0;
             intClickX.add(0);
             intClickY.add(0);
@@ -829,11 +830,7 @@ public class Sketch extends PApplet {
 
         if(intClickX.get(intClickX.size() - 1) >= 555 && intClickX.get(intClickX.size() - 1) <= 945){
           if(intClickY.get(intClickY.size() - 1) >= 440 && intClickY.get(intClickY.size() - 1) <= 550){            
-            blnPruneDone = false;
-            blnJellyDone = false;
-
             reset();
-
             intLvl = 1;
           }
         }
@@ -847,9 +844,6 @@ public class Sketch extends PApplet {
 
         if(intClickX.get(intClickX.size() - 1) >= 640 && intClickX.get(intClickX.size() - 1) <= 860){
           if(intClickY.get(intClickY.size() - 1) >= 570 && intClickY.get(intClickY.size() - 1) <= 650){
-            blnPruneDone = false;
-            blnJellyDone = false;
-
             reset();   
                
             intLvl = 0;
@@ -871,6 +865,12 @@ public class Sketch extends PApplet {
     intPrunesKilled = 0;
     intJelliesKilled = 0;
 
+    blnPruneDone = false;
+    blnJellyDone = false;
+
+    fltBirdAngle = -3;
+    intEggY = 1000;
+    
     charKeys.add('d');
 
     for (int i = 0; i < pruneArmyX.length; i++) {
@@ -958,7 +958,6 @@ public class Sketch extends PApplet {
           pruneHealth[i] = 100;
 
           intPruneSpawn = millis();
-          System.out.println(intPrunesKilled);;
         }
 
         if(intPrunesKilled >= 4){
@@ -1107,49 +1106,53 @@ public class Sketch extends PApplet {
     }
   }
 
-  // All interactions with birds
+  // Bird movement
   public void bird(){
     intBirdFrame++;
     intBirdFrame %= imgBirdLeftMove.length;
 
+    // Moves in a sin wave
     fltBirdX = (fltBirdAngle) * 90; 
     fltBirdY = 150 + sin(fltBirdAngle) * 60;
 
-    fltBirdAngle += 0.03;
+    fltBirdAngle += 0.2;
 
-    // Resets the wave once it's out of the screen
-    if (fltBirdAngle > 9.75) {
-      fltBirdAngle = -1;
-    }
-
-    // Left or right facing
-    if(intBirdSpeed > 0){
+    // Turns the bird around
+    if(fltBirdX >= 1550){
+      fltBirdX = 3100 - ((fltBirdAngle) * 90); 
       image(imgBirdLeftMove[intBirdFrame], fltBirdX, fltBirdY);
-      fltBirdX -= intBirdSpeed;
     }
 
+    else{ 
+      image(imgBirdRightMove[intBirdFrame], fltBirdX, fltBirdY);  
+    }
+    
+    // Resets the wave
+    if(fltBirdAngle > 36){
+      fltBirdAngle = -3;
+    }
+  }
+
+  public void egg(){
+    // Falling eggs
+    intEggX = (int) fltBirdX + 55;
+    image(imgEgg, intEggX, intEggY);
+
+    if(intEggY < 780){
+      intEggY += 60;
+    }
+    
     else{
-      image(imgBirdRightMove[intBirdFrame], fltBirdX, fltBirdY);
-      fltBirdX -= intBirdSpeed;
-    }
-
-    // Spawns eggs in intervals
-    if(millis() - eggDropInterval > eggDropCooldown){
-      intEggY--;
-
-      eggDropInterval = millis();
-    }
-
-    // Keeps bird in bounds 
-    if(fltBirdX <= -20 || fltBirdX >= 1400){
-      intBirdSpeed = intBirdSpeed * -1;
+      intEggY = (int) fltBirdY + 50;
     }
 
     // Losing hearts
-    if(intEggX + 70 >= intCharX + 50 && intEggX + 70 <= intCharX + 150){
-      if(intEggY + 70 >= intCharY + 110 && intEggY + 70 <= intCharY + 180){
-        intLives--;
-        intEggX = - 1000;
+    if(fltBirdX + 70 >= intCharX + 50 && fltBirdX + 70 <= intCharX + 150){
+      if(intEggY - 50 >= intCharY + 10 && intEggY - 50 <= intCharY + 200){
+        if(millis() - eggAtkInterval > eggAtkCooldown){
+          intLives--;
+          eggAtkInterval = millis();
+        }
       }
     }
   }
