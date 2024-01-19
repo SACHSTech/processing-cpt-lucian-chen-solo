@@ -3,6 +3,7 @@ import processing.core.PApplet;
 import processing.core.PImage;
 
 public class Sketch extends PApplet {
+  // Images
   PImage imgBackground;
 
   PImage imgMenu;
@@ -73,10 +74,22 @@ public class Sketch extends PApplet {
   PImage imgWalkLeft1;
   PImage imgWalkLeft2;
 
+  // Gallery images
+  PImage imgBackgroundSketch;
+  PImage imgBackgroundFlat;
+  PImage imgBackgroundLineart;
+
+  PImage imgCharSketch;
+  PImage imgCharLineart;
+
+  PImage imgAttackSketch;
+
+  PImage imgCreatureConcept;
+
+  // Character variables
   int intCharX = 50;
   int intCharY = 500;
   int intSpeedX = 15;
-  int intSpeedY = 40;
 
   float fltCharJumpX;
   float fltCharJumpY;
@@ -85,13 +98,9 @@ public class Sketch extends PApplet {
 
   int intLives = 10;
 
-  int intWinPause = 5000;
-  int intWinInterval = 0; 
-
   boolean blnRight = false;
   boolean blnLeft = false;
   boolean blnJump = false;
-
   boolean blnAtk = false;
 
   PImage[] imgRightWalking = new PImage[4];
@@ -99,45 +108,47 @@ public class Sketch extends PApplet {
 
   PImage[] imgRightAttack = new PImage[9];
   PImage[] imgLeftAttack = new PImage[9];
-  
-  // Prune
-  float[] pruneArmyX = new float[2];
-  float[] pruneArmyY = new float[5];
-  int[] pruneSpeed = new int[5];
-  float[] pruneHealth = new float[5];
-  boolean[] blnDrawPrune = new boolean[5];
+   
+  // Prune variables
+  int intNumPrune = 2;
+  float[] fltPruneArmyX = new float[intNumPrune];
+  float[] fltPruneArmyY = new float[intNumPrune];
+  int[] intPruneSpeed = new int[intNumPrune];
+  float[] fltPruneHealth = new float[intNumPrune];
+  boolean[] blnDrawPrune = new boolean[intNumPrune];
   boolean blnPruneDone = false;
 
   PImage[] imgPruneLeftMove = new PImage[9];
   PImage[] imgPruneRightMove = new PImage[9];
 
-  int[] pruneSpawnCooldown = new int[5];
+  int[] pruneSpawnCooldown = new int[intNumPrune];
 
-  int[] pruneAtkCooldown = new int[5];
-  int[] pruneAtkInterval = new int [5];
+  int[] pruneAtkCooldown = new int[intNumPrune];
+  int[] pruneAtkInterval = new int [intNumPrune];
 
   int intPruneSpawn = 1000;
   int intPrunesKilled = 0;
 
-  // Jelly
-  float[] jellyArmyX = new float[2];
-  float[] jellyArmyY = new float[5];
-  int[] jellySpeed = new int[5];
-  float[] jellyHealth = new float[5];
-  boolean[] blnDrawJelly = new boolean[5];
+  // Jelly variables
+  int intNumJelly = 3;
+  float[] jellyArmyX = new float[intNumJelly];
+  float[] jellyArmyY = new float[intNumJelly];
+  int[] jellySpeed = new int[intNumJelly];
+  float[] jellyHealth = new float[intNumJelly];
+  boolean[] blnDrawJelly = new boolean[intNumJelly];
   boolean blnJellyDone = false;
 
   PImage[] imgJellyMove = new PImage[9];
 
-  int[] jellySpawnCooldown = new int[5];
+  int[] jellySpawnCooldown = new int[intNumJelly];
 
-  int[] jellyAtkCooldown = new int[5];
-  int[] jellyAtkInterval = new int [5];
+  int[] jellyAtkCooldown = new int[intNumJelly];
+  int[] jellyAtkInterval = new int [intNumJelly];
 
   int intJellySpawn = 1500;
   int intJelliesKilled = 0;
 
-  // Bird
+  // Bird & egg variables
   float fltBirdX = 1500;
   float fltBirdY = 120;
 
@@ -146,21 +157,25 @@ public class Sketch extends PApplet {
   PImage[] imgBirdRightMove = new PImage[9];
   PImage[] imgBirdLeftMove = new PImage[9];
 
-  int intEggX;
   int intEggY = 200;
-  int eggAtkCooldown = 3000;
+
+  int eggAtkCooldown = 1000;
   int eggAtkInterval = 0;
 
-  int intFrame = 0;
+  // Frames
+  int intCharFrame = 0;
   int intAtkFrame = 0;
   int intPruneFrame = 0;
   int intJellyFrame = 0;
   int intBirdFrame = 0;
 
+  // Arraylists
   ArrayList<Character> charKeys = new ArrayList<Character>();
   ArrayList<Integer> intClickX = new ArrayList<Integer>();
   ArrayList<Integer> intClickY = new ArrayList<Integer>();
 
+
+  // Level
   int intLvl = 0;
 
   public void settings() {
@@ -168,6 +183,7 @@ public class Sketch extends PApplet {
   }
 
   public void setup() {
+    // Backgrounds
     imgBackground = loadImage("background.png");
 
     imgMenu = loadImage("menu.png");
@@ -197,7 +213,23 @@ public class Sketch extends PApplet {
     imgAgain = loadImage("win again select.png");
 
     imgWinMenu = loadImage("win menu select.png");
+    
+    // Gallery
+    imgBackgroundSketch = loadImage("background sketch.png");
 
+    imgBackgroundFlat = loadImage("background flat.png");
+
+    imgBackgroundLineart = loadImage("background lineart.png");
+    
+    imgCharSketch = loadImage("character sketch.jpg");
+    
+    imgCharLineart = loadImage("character lineart.jpg");
+
+    imgAttackSketch = loadImage("scythe concept.jpg");
+
+    imgCreatureConcept = loadImage("creature concept.jpg");
+
+    // Lives
     imgHeart = loadImage("heart.png");
     imgHeart.resize(50, 50);
 
@@ -249,14 +281,14 @@ public class Sketch extends PApplet {
     imgEgg = loadImage("egg.png");
     imgEgg.resize(50, 50);
 
-    // Scythe
+    // Scythe rest
     imgScytheRestRight = loadImage("scythe rest right.png");
     imgScytheRestRight.resize(200, 200);
 
     imgScytheRestLeft = loadImage("scythe rest left.png");
     imgScytheRestLeft.resize(200, 200);
 
-    // Right
+    // Scythe right
     imgScytheAR1 = loadImage("scythe attack 1r.png");
     imgScytheAR1.resize(300, 300);
 
@@ -281,7 +313,7 @@ public class Sketch extends PApplet {
     imgScytheAR8 = loadImage("scythe attack 8r.png");
     imgScytheAR8.resize(300, 300);
 
-    // Left
+    // Scythe left
     imgScytheAL1 = loadImage("scythe attack 1l.png");
     imgScytheAL1.resize(300, 300);
 
@@ -408,17 +440,18 @@ public class Sketch extends PApplet {
     
     frameRate(9);
 
+    // Initializing arraylists
     charKeys.add('d');
 
     intClickX.add(0);
     intClickY.add(0);
 
     // Sets the starting location, speed, and health of all prunes
-    for (int i = 0; i < pruneArmyX.length; i++) {
-      pruneArmyX[i] = -1000;
-      pruneArmyY[i] = 550;
-      pruneSpeed[i] = 10;
-      pruneHealth[i] = 100;
+    for (int i = 0; i < fltPruneArmyX.length; i++) {
+      fltPruneArmyX[i] = -1000;
+      fltPruneArmyY[i] = 550;
+      intPruneSpeed[i] = 10;
+      fltPruneHealth[i] = 100;
 
       pruneAtkCooldown[i] = 1500;
       pruneAtkInterval[i] = 0;
@@ -523,7 +556,7 @@ public class Sketch extends PApplet {
   }
 
   public void mousePressed(){
-    if(intLvl == 1){
+    if(intLvl == 1 || intLvl == 2){
       blnAtk = true;
     }
 
@@ -583,15 +616,15 @@ public class Sketch extends PApplet {
  
     // Character movement
     if(blnRight && intCharX <= 1350){
-      intFrame++;
-      intFrame %= imgRightWalking.length;
+      intCharFrame++;
+      intCharFrame %= imgRightWalking.length;
       
       if(!blnAtk){
         image(imgScytheRestRight, intCharX - 80, intCharY);
         intAtkFrame = 0;
       }
 
-      image(imgRightWalking[intFrame], intCharX, intCharY);
+      image(imgRightWalking[intCharFrame], intCharX, intCharY);
       intCharX += intSpeedX;
       blnAtk = false;
 
@@ -602,15 +635,15 @@ public class Sketch extends PApplet {
     }
 
     else if(blnLeft && intCharX >= -50){
-      intFrame++;
-      intFrame %= imgLeftWalking.length;
+      intCharFrame++;
+      intCharFrame %= imgLeftWalking.length;
 
       if(!blnAtk){
         image(imgScytheRestLeft, intCharX + 80, intCharY);
         intAtkFrame = 0;
       }
 
-      image(imgLeftWalking[intFrame], intCharX, intCharY);
+      image(imgLeftWalking[intCharFrame], intCharX, intCharY);
       intCharX -= intSpeedX;
       blnAtk = false;
 
@@ -684,7 +717,7 @@ public class Sketch extends PApplet {
       }
     }
 
-    if(intPrunesKilled < 5){
+    if(intPrunesKilled < 7){
       prune();
     }
 
@@ -692,7 +725,7 @@ public class Sketch extends PApplet {
       blnPruneDone = true;
     }
 
-    if(intJelliesKilled < 5){
+    if(intJelliesKilled < 9){
       jelly();
     }
 
@@ -729,6 +762,155 @@ public class Sketch extends PApplet {
 
   public void tutLvl(){
     image(imgBackground, 0, 0);
+
+    for(int i = 0; i < intLives; i++){
+      image(imgHeart, 10 + (60 * i), 10);
+    }
+ 
+    // Character movement
+    if(blnRight && intCharX <= 1350){
+      intCharFrame++;
+      intCharFrame %= imgRightWalking.length;
+      
+      if(!blnAtk){
+        image(imgScytheRestRight, intCharX - 80, intCharY);
+        intAtkFrame = 0;
+      }
+
+      image(imgRightWalking[intCharFrame], intCharX, intCharY);
+      intCharX += intSpeedX;
+      blnAtk = false;
+
+      fltAngle = 0;
+      intCharY = 500;
+
+      charKeys.add('d');
+    }
+
+    else if(blnLeft && intCharX >= -50){
+      intCharFrame++;
+      intCharFrame %= imgLeftWalking.length;
+
+      if(!blnAtk){
+        image(imgScytheRestLeft, intCharX + 80, intCharY);
+        intAtkFrame = 0;
+      }
+
+      image(imgLeftWalking[intCharFrame], intCharX, intCharY);
+      intCharX -= intSpeedX;
+      blnAtk = false;
+
+      fltAngle = 0;
+      intCharY = 500;
+
+      charKeys.add('a');
+    }
+
+    else if(blnJump){
+      if(charKeys.get(charKeys.size() - 1) == 'd'){
+        image(imgScytheRestRight, intCharX - 80, intCharY);
+        image(imgStandRight, intCharX, intCharY);
+
+        fltCharJumpX = fltAngle + 5; 
+        fltCharJumpY = (float) (Math.pow(fltAngle, 2) - (4 * fltAngle)) - 20;
+
+        intCharX += fltCharJumpX;
+        intCharY += fltCharJumpY;
+      }
+
+      else if(charKeys.get(charKeys.size() - 1) == 'a'){
+        image(imgScytheRestLeft, intCharX + 80, intCharY);
+        image(imgStandLeft, intCharX, intCharY);
+
+        fltCharJumpX = fltAngle + 5; 
+        fltCharJumpY = (float) (Math.pow(fltAngle, 2) - (4 * fltAngle)) - 20;
+
+        intCharX -= fltCharJumpX;
+        intCharY += fltCharJumpY;
+      }
+
+      fltAngle += 1;
+      blnAtk = false;
+
+      // Resets jump
+      if(fltAngle > 11){
+        intCharY = 500;
+        fltAngle = 0;
+        blnJump = false;
+      }
+
+      // Keeps character in bounds when jumping
+      if(intCharX <= -50 || intCharX >= 1350){
+        intCharY = 500;
+        fltAngle = 0;
+        blnJump = false;
+      }
+    }
+
+    // Character resting
+    else{
+      intCharY = 500; 
+      fltAngle = 0;
+      blnJump = false;
+
+      if(charKeys.get(charKeys.size() - 1) == 'd'){
+        if(!blnAtk){
+          image(imgScytheRestRight, intCharX - 80, intCharY);
+        }
+
+        image(imgStandRight, intCharX, intCharY); 
+      }
+      
+      else if(charKeys.get(charKeys.size() - 1) == 'a'){
+        if(!blnAtk){
+          image(imgScytheRestLeft, intCharX + 80, intCharY);
+        }
+
+        image(imgStandLeft, intCharX, intCharY);
+      }
+    }
+
+    // if(intPrunesKilled < 7){
+    //   prune();
+    // }
+
+    // else{
+    //   blnPruneDone = true;
+    // }
+
+    // if(intJelliesKilled < 9){
+    //   jelly();
+    // }
+
+    // else{
+    //   blnJellyDone = true;
+    // }
+    
+    // egg();
+    // bird();
+    
+    // Attack animation
+    if(blnAtk){
+      if(charKeys.get(charKeys.size() - 1) == 'd'){
+        intAtkFrame++;
+        intAtkFrame %= imgRightAttack.length;
+        image(imgRightAttack[intAtkFrame], intCharX - 10, intCharY - 30);
+
+        if(intAtkFrame == 8){
+          blnAtk = false;
+        }
+      }
+
+      else if(charKeys.get(charKeys.size() - 1) == 'a'){
+        intAtkFrame++;
+        intAtkFrame %= imgLeftAttack.length;
+        image(imgLeftAttack[intAtkFrame], intCharX - 90, intCharY - 30);
+
+        if(intAtkFrame == 8){
+          blnAtk = false;
+        }
+      }
+    }
   }
 
   public void galleryLvl(){
@@ -821,6 +1003,8 @@ public class Sketch extends PApplet {
   }
 
   public void youWin(){
+    intLvl = 5;
+
     image(imgWin, 0, 0);
 
     // Play again
@@ -873,9 +1057,9 @@ public class Sketch extends PApplet {
     
     charKeys.add('d');
 
-    for (int i = 0; i < pruneArmyX.length; i++) {
-      pruneArmyX[i] = -1000;
-      pruneHealth[i] = 100;
+    for (int i = 0; i < fltPruneArmyX.length; i++) {
+      fltPruneArmyX[i] = -1000;
+      fltPruneHealth[i] = 100;
       blnDrawPrune[i] = false;
     }
 
@@ -891,33 +1075,33 @@ public class Sketch extends PApplet {
     intPruneFrame++;
     intPruneFrame %= imgPruneLeftMove.length;
 
-    for(int i = 0; i < pruneArmyX.length; i++){
+    for(int i = 0; i < fltPruneArmyX.length; i++){
       // Prune healthbar
       stroke(255);
       fill(135, 219, 121);
 
-      if(pruneHealth[i] == 0){
+      if(fltPruneHealth[i] == 0){
         noStroke();
       }
 
-      rect(pruneArmyX[i] + 15, pruneArmyY[i], 1 * pruneHealth[i], 25);
+      rect(fltPruneArmyX[i] + 15, fltPruneArmyY[i], 1 * fltPruneHealth[i], 25);
 
       // Prune health lose
       if(charKeys.get(charKeys.size() - 1) == 'd' && blnAtk){
-        if(((intCharX + 200 >= pruneArmyX[i] - 10) && (intCharX + 250 <= pruneArmyX[i] + 140)) && pruneHealth[i] > 0 && intAtkFrame == 1){
-          pruneHealth[i] = pruneHealth[i] - 10;
-          pruneArmyX[i] = pruneArmyX[i] + 70;
+        if(((intCharX + 200 >= fltPruneArmyX[i] - 10) && (intCharX + 250 <= fltPruneArmyX[i] + 140)) && fltPruneHealth[i] > 0 && (intAtkFrame == 1 || intAtkFrame == 3)){
+          fltPruneHealth[i] = fltPruneHealth[i] - 10;
+          fltPruneArmyX[i] = fltPruneArmyX[i] + 70;
         }
       }
 
       if(charKeys.get(charKeys.size() - 1) == 'a' && blnAtk){
-        if(((intCharX - 50 >= pruneArmyX[i] - 10) && (intCharX <= pruneArmyX[i] + 140)) && pruneHealth[i] > 0 && intAtkFrame == 1){
-          pruneHealth[i] = pruneHealth[i] - 10;
-          pruneArmyX[i] = pruneArmyX[i] - 70;
+        if(((intCharX - 50 >= fltPruneArmyX[i] - 10) && (intCharX <= fltPruneArmyX[i] + 140)) && fltPruneHealth[i] > 0 && (intAtkFrame == 1 || intAtkFrame == 3)){
+          fltPruneHealth[i] = fltPruneHealth[i] - 10;
+          fltPruneArmyX[i] = fltPruneArmyX[i] - 70;
         }
       }
 
-      if(pruneHealth[i] <= 0){
+      if(fltPruneHealth[i] <= 0){
         blnDrawPrune[i] = false;
 
         if(millis() - intPruneSpawn > pruneSpawnCooldown[i]){
@@ -928,64 +1112,64 @@ public class Sketch extends PApplet {
       // Checks to see if prune is drawn
       if(blnDrawPrune[i]){
         // Left or right facing
-        if(pruneSpeed[i] > 0){
-          image(imgPruneLeftMove[intPruneFrame], pruneArmyX[i], pruneArmyY[i]);
-          pruneArmyX[i] -= pruneSpeed[i];
+        if(intPruneSpeed[i] > 0){
+          image(imgPruneLeftMove[intPruneFrame], fltPruneArmyX[i], fltPruneArmyY[i]);
+          fltPruneArmyX[i] -= intPruneSpeed[i];
         }
 
         else{
-          image(imgPruneRightMove[intPruneFrame], pruneArmyX[i], pruneArmyY[i]);
-          pruneArmyX[i] -= pruneSpeed[i];
+          image(imgPruneRightMove[intPruneFrame], fltPruneArmyX[i], fltPruneArmyY[i]);
+          fltPruneArmyX[i] -= intPruneSpeed[i];
         }
       
         // Left or right animation
-        if(pruneArmyX[i] >= intCharX + 20 && pruneArmyX[i] <= intCharX + 100 && pruneSpeed[i] > 0){
-          image(imgPruneLeftAtk, pruneArmyX[i], pruneArmyY[i]);
+        if(fltPruneArmyX[i] >= intCharX + 20 && fltPruneArmyX[i] <= intCharX + 100 && intPruneSpeed[i] > 0){
+          image(imgPruneLeftAtk, fltPruneArmyX[i], fltPruneArmyY[i]);
         }
 
-        else if(pruneArmyX[i] >= intCharX - 50 && pruneArmyX[i] <= intCharX + 50 && pruneSpeed[i] < 0){
-          image(imgPruneRightAtk, pruneArmyX[i], pruneArmyY[i]);
+        else if(fltPruneArmyX[i] >= intCharX - 50 && fltPruneArmyX[i] <= intCharX + 50 && intPruneSpeed[i] < 0){
+          image(imgPruneRightAtk, fltPruneArmyX[i], fltPruneArmyY[i]);
         }
       }
 
       // Spawns prunes in intervals
       else{
-        pruneArmyX[i] = -1000;
+        fltPruneArmyX[i] = -1000;
 
         if(millis() - intPruneSpawn > pruneSpawnCooldown[i]){
           blnDrawPrune[i] = true;
-          pruneArmyX[i] = random(1100, 1350);
-          pruneHealth[i] = 100;
+          fltPruneArmyX[i] = random(1100, 1350);
+          fltPruneHealth[i] = 100;
 
           intPruneSpawn = millis();
         }
 
-        if(intPrunesKilled >= 4){
-          pruneArmyX[i] = -1000;
-          pruneSpeed[i] = 0;
+        if(intPrunesKilled >= 6){
+          fltPruneArmyX[i] = -1000;
+          intPruneSpeed[i] = 0;
         }
       }
 
       // Keeps prune in bounds and hones the player
-      if(pruneArmyX[i] <= -20 || pruneArmyX[i] >= 1400){
-        pruneSpeed[i] = pruneSpeed[i] * -1;
+      if(fltPruneArmyX[i] <= -20 || fltPruneArmyX[i] >= 1400){
+        intPruneSpeed[i] = intPruneSpeed[i] * -1;
       }
 
-      if(pruneArmyX[i] <= intCharX - 100){
-        pruneSpeed[i] = -10;
+      if(fltPruneArmyX[i] <= intCharX - 100){
+        intPruneSpeed[i] = -10;
       }
 
-      if(pruneArmyX[i] >= intCharX + 150){
-        pruneSpeed[i] = 10;
+      if(fltPruneArmyX[i] >= intCharX + 150){
+        intPruneSpeed[i] = 10;
       }
 
-      if(pruneArmyX[i] < -400){
-        pruneSpeed[i] = 0;
+      if(fltPruneArmyX[i] < -400){
+        intPruneSpeed[i] = 0;
       }
 
       // Losing hearts
-      if(pruneArmyX[i] + 70 >= intCharX + 50 && pruneArmyX[i] + 70 <= intCharX + 150){
-        if(pruneArmyY[i] + 70 >= intCharY + 110 && pruneArmyY[i] + 70 <= intCharY + 180){
+      if(fltPruneArmyX[i] + 70 >= intCharX + 50 && fltPruneArmyX[i] + 70 <= intCharX + 150){
+        if(fltPruneArmyY[i] + 70 >= intCharY + 110 && fltPruneArmyY[i] + 70 <= intCharY + 180){
           if(millis() - pruneAtkInterval[i] > pruneAtkCooldown[i]){
             intLives--;
             pruneAtkInterval[i] = millis();
@@ -1013,14 +1197,14 @@ public class Sketch extends PApplet {
 
       // Jelly health lose
       if(charKeys.get(charKeys.size() - 1) == 'd' && blnAtk){
-        if(((intCharX + 200 >= jellyArmyX[i] - 10) && (intCharX + 250 <= jellyArmyX[i] + 140)) && jellyHealth[i] > 0 && intAtkFrame == 1){
+        if(((intCharX + 200 >= jellyArmyX[i] - 10) && (intCharX + 250 <= jellyArmyX[i] + 140)) && jellyHealth[i] > 0 && (intAtkFrame == 1 || intAtkFrame == 3)){
           jellyHealth[i] = jellyHealth[i] - 10;
           jellyArmyX[i] = jellyArmyX[i] + 70;
         }
       }
 
       if(charKeys.get(charKeys.size() - 1) == 'a' && blnAtk){
-        if(((intCharX - 50 >= jellyArmyX[i] - 10) && (intCharX <= jellyArmyX[i] + 140)) && jellyHealth[i] > 0 && intAtkFrame == 1){
+        if(((intCharX - 50 >= jellyArmyX[i] - 10) && (intCharX <= jellyArmyX[i] + 140)) && jellyHealth[i] > 0 && (intAtkFrame == 1 || intAtkFrame == 3)){
           jellyHealth[i] = jellyHealth[i] - 10;
           jellyArmyX[i] = jellyArmyX[i] - 70;
         }
@@ -1071,7 +1255,7 @@ public class Sketch extends PApplet {
           intJellySpawn = millis();
         }
 
-        if(intJelliesKilled >= 4){
+        if(intJelliesKilled >= 8){
           jellyArmyX[i] = -1000;
           jellySpeed[i] = 0;
         }
@@ -1135,8 +1319,7 @@ public class Sketch extends PApplet {
 
   public void egg(){
     // Falling eggs
-    intEggX = (int) fltBirdX + 55;
-    image(imgEgg, intEggX, intEggY);
+    image(imgEgg, fltBirdX + 55, intEggY);
 
     if(intEggY < 780){
       intEggY += 60;
@@ -1152,6 +1335,8 @@ public class Sketch extends PApplet {
         if(millis() - eggAtkInterval > eggAtkCooldown){
           intLives--;
           eggAtkInterval = millis();
+
+          intEggY = (int) fltBirdY + 50;
         }
       }
     }
