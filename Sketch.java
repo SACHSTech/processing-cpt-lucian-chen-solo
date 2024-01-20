@@ -1365,11 +1365,11 @@ public class Sketch extends PApplet {
         }
       
         // Left or right animation
-        if(fltPruneArmyX[i] >= intCharX + 20 && fltPruneArmyX[i] <= intCharX + 100 && intPruneSpeed[i] > 0){
+        if(fltPruneArmyX[i] + 70 >= intCharX + 50 && fltPruneArmyX[i] + 70 <= intCharX + 150 && intPruneSpeed[i] > 0){
           image(imgPruneLeftAtk, fltPruneArmyX[i], fltPruneArmyY[i]);
         }
 
-        else if(fltPruneArmyX[i] >= intCharX - 50 && fltPruneArmyX[i] <= intCharX + 50 && intPruneSpeed[i] < 0){
+        else if(fltPruneArmyX[i] + 70 >= intCharX + 50 && fltPruneArmyX[i] + 70 <= intCharX + 150 && intPruneSpeed[i] < 0){
           image(imgPruneRightAtk, fltPruneArmyX[i], fltPruneArmyY[i]);
         }
       }
@@ -1476,11 +1476,7 @@ public class Sketch extends PApplet {
         
         fltJellyArmyX[i] -= intJellySpeed[i];
 
-        if(fltJellyArmyX[i] >= intCharX + 20 && fltJellyArmyX[i] <= intCharX + 100 && intJellySpeed[i] > 0){
-          image(imgJellyAtk, fltJellyArmyX[i], fltJellyArmyY[i]);
-        }
-
-        else if(fltJellyArmyX[i] >= intCharX - 50 && fltJellyArmyX[i] <= intCharX + 50 && intJellySpeed[i] < 0){
+        if(fltJellyArmyX[i] + 70 >= intCharX + 50 && fltJellyArmyX[i] + 70 <= intCharX + 150){
           image(imgJellyAtk, fltJellyArmyX[i], fltJellyArmyY[i]);
         }
 
