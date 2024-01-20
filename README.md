@@ -9,3 +9,8 @@ There is also a tutorial level and a gallery included on the title screen. The t
 The player moves using the A and D keys, moving left and right respectively. Space can also be used to jump and you attack by left-clicking (or just clicking in general). Enemies will continually move towards the player with a honing mechanic. 
 
 The game has no time limit or scoring system so the only thing you can show off is the number of lives you have left. 
+
+![Screenshot 2024-01-19 205739](https://github.com/SACHSTech/processing-cpt-lucian-chen-solo/assets/145130213/f794c827-0805-4e87-8df2-bd0a1ae912af)
+![Screenshot 2024-01-19 224745](https://github.com/SACHSTech/processing-cpt-lucian-chen-solo/assets/145130213/a0c0f773-366c-40b6-91df-6121e7e7e305)
+![Screenshot 2024-01-19 223718](https://github.com/SACHSTech/processing-cpt-lucian-chen-solo/assets/145130213/9e006c77-4009-4e6c-b333-e35c8627b611)
+![Screenshot 2024-01-19 223646](https://github.com/SACHSTech/processing-cpt-lucian-chen-solo/assets/145130213/abcd6eb4-50e5-4479-a4e7-cc11e8bf1e34)
