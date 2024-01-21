@@ -126,7 +126,7 @@ public class Sketch extends PApplet {
   PImage[] imgLeftAttack = new PImage[9];
    
   // Prune variables
-  int intNumPrune = 2;
+  int intNumPrune = 3;
 
   float[] fltPruneArmyX = new float[intNumPrune];
   float[] fltPruneArmyY = new float[intNumPrune];
@@ -149,7 +149,7 @@ public class Sketch extends PApplet {
   float fltTutPruneX = 1100;
 
   // Jelly variables
-  int intNumJelly = 3;
+  int intNumJelly = 4;
 
   float[] fltJellyArmyX = new float[intNumJelly];
   float[] fltJellyArmyY = new float[intNumJelly];
@@ -181,7 +181,7 @@ public class Sketch extends PApplet {
 
   int intEggY = 200;
 
-  int eggAtkCooldown = 1000;
+  int eggAtkCooldown = 500;
   int eggAtkInterval = 0;
 
   // Frames
@@ -830,7 +830,7 @@ public class Sketch extends PApplet {
     }
 
     // Enemies
-    if(intPrunesKilled < 7){
+    if(intPrunesKilled < 9){
       prune();
     }
 
@@ -838,7 +838,7 @@ public class Sketch extends PApplet {
       blnPruneDone = true;
     }
 
-    if(intJelliesKilled < 9){
+    if(intJelliesKilled < 15){
       jelly();
     }
 
@@ -1386,7 +1386,7 @@ public class Sketch extends PApplet {
           pruneSpawnInterval = millis();
         }
 
-        if(intPrunesKilled >= 6){
+        if(intPrunesKilled >= 7){
           fltPruneArmyX[i] = -1000;
           intPruneSpeed[i] = 0;
         }
@@ -1497,7 +1497,7 @@ public class Sketch extends PApplet {
           jellySpawnInterval = millis();
         }
 
-        if(intJelliesKilled >= 8){
+        if(intJelliesKilled >= 12){
           fltJellyArmyX[i] = -1000;
           intJellySpeed[i] = 0;
         }
@@ -1524,7 +1524,7 @@ public class Sketch extends PApplet {
       if(fltJellyArmyX[i] + 70 >= intCharX + 50 && fltJellyArmyX[i] + 70 <= intCharX + 150){
         if(fltJellyArmyY[i] + 70 >= intCharY + 110 && fltJellyArmyY[i] + 70 <= intCharY + 180){
           if(millis() - jellyAtkInterval[i] > jellyAtkCooldown[i]){
-            intLives--;
+            //intLives--;
             jellyAtkInterval[i] = millis();
           }
         }
