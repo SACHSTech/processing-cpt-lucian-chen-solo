@@ -546,7 +546,7 @@ public class Sketch extends PApplet {
     }
 
     else if(intLvl == 3){
-      galleryLvl();
+      gallery();
     }
 
     else if(intLvl == 4){
@@ -639,15 +639,17 @@ public class Sketch extends PApplet {
    * @author: L. Chen
    */
   public void mousePressed(){
+    intClickX.add(mouseX);
+    intClickY.add(mouseY);
+
     if(intLvl == 1 || intLvl == 2){
       blnAtk = true;
     }
 
-    intClickX.add(mouseX);
-    intClickY.add(mouseY);
-
     if(intTextNum == 2){
-      intTextNum = 3;
+      if(!blnJump){
+        intTextNum = 3;
+      }
     }
 
     else if(intTextNum == 3){
@@ -721,6 +723,7 @@ public class Sketch extends PApplet {
    */
   public void gameLvl(){
     image(imgBackground, 0, 0);
+    image(imgPauseText, 0, 0);
 
     for(int i = 0; i < intLives; i++){
       image(imgHeart, 10 + (60 * i), 10);
@@ -871,8 +874,6 @@ public class Sketch extends PApplet {
         }
       }
     }
-
-    image(imgPauseText, 0, 0);
   }
 
   /**
@@ -1048,22 +1049,23 @@ public class Sketch extends PApplet {
     }
 
     else if(intTextNum == 6){
-      image(imgTutText8, 0, 0);
       tutPrune();
       tutJelly();
 
-      if(blnRight || blnLeft){
+      image(imgTutText8, 0, 0);
+
+      if(blnRight || blnLeft || blnJump){
         intTextNum = 7;
       }
     }
 
     else if(intTextNum == 7){
+      tutPrune();
+      tutJelly();
+
       if(intPruneHealth[0] == 100 && intJellyHealth[0] == 70){
         image(imgTutText9, 0, 0);
       }
-
-      tutPrune();
-      tutJelly();
 
       if(intPruneHealth[0] <= 0 && intJellyHealth[0] <= 0){
         intTextNum = 8;
@@ -1072,12 +1074,9 @@ public class Sketch extends PApplet {
 
     else if(intTextNum == 8){
       image(imgTutText10, 0, 0);
-
-      tutPrune();
-      tutJelly();
     }
 
-    // Resets if plater died in tutorial
+    // Resets if player dies in tutorial
     if(intLives == 0){
       intTextNum = 9;
 
@@ -1117,7 +1116,7 @@ public class Sketch extends PApplet {
    * Method that runs the gallery
    * @author: L. Chen
    */
-  public void galleryLvl(){
+  public void gallery(){
     if(intGalleryPage == 0){
       image(imgGallery1, 0, 0);
     }
@@ -1291,6 +1290,8 @@ public class Sketch extends PApplet {
     fltTutPruneX = 1100;
     fltTutJellyX = 1350;
     
+    intGalleryPage = 0;
+
     charKeys.add('d');
 
     for (int i = 0; i < fltPruneArmyX.length; i++) {
@@ -1304,8 +1305,6 @@ public class Sketch extends PApplet {
       intJellyHealth[i] = 70;
       blnDrawJelly[i] = false;
     }
-
-    intGalleryPage = 0;
   }
 
   /**
@@ -1524,7 +1523,7 @@ public class Sketch extends PApplet {
       if(fltJellyArmyX[i] + 70 >= intCharX + 50 && fltJellyArmyX[i] + 70 <= intCharX + 150){
         if(fltJellyArmyY[i] + 70 >= intCharY + 110 && fltJellyArmyY[i] + 70 <= intCharY + 180){
           if(millis() - jellyAtkInterval[i] > jellyAtkCooldown[i]){
-            //intLives--;
+            intLives--;
             jellyAtkInterval[i] = millis();
           }
         }
@@ -1541,7 +1540,7 @@ public class Sketch extends PApplet {
     intBirdFrame++;
     intBirdFrame %= imgBirdLeftMove.length;
 
-    // Moves in a sin wave
+    // Bird moves in a sin wave
     fltBirdX = (fltBirdAngle) * 90; 
     fltBirdY = 150 + sin(fltBirdAngle) * 60;
 
@@ -1626,10 +1625,6 @@ public class Sketch extends PApplet {
       }
     }
 
-    if(intPruneHealth[0] <= 0){
-      fltTutPruneX = -1000;
-    }
-
     // Checks to see if prune is drawn
     if(blnDrawPrune[0]){
       // Left or right facing
@@ -1655,9 +1650,7 @@ public class Sketch extends PApplet {
     
     // Spawns prune
     else{
-      if(millis() - pruneSpawnInterval > pruneSpawnCooldown[0]){
-        blnDrawPrune[0] = true;
-      }
+      blnDrawPrune[0] = true;
     }
 
     // Keeps prune in bounds and hones the player
@@ -1722,10 +1715,6 @@ public class Sketch extends PApplet {
       }
     }
 
-    if(intJellyHealth[0] <= 0){
-      fltTutJellyX = -1000;
-    }
-
     // Checks to see if jelly is drawn
     if(blnDrawJelly[0]){
       if(intJellySpeed[0] > 0){
@@ -1751,11 +1740,9 @@ public class Sketch extends PApplet {
       }
     }
 
-    // Spawns jellies 
+    // Spawns jelly 
     else{
-      if(millis() - jellySpawnInterval > jellySpawnCooldown[0]){
-        blnDrawJelly[0] = true;
-      }
+      blnDrawJelly[0] = true;
     }
 
     // Keeps jelly in bounds and hones the player
