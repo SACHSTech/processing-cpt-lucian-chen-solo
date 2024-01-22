@@ -1329,16 +1329,28 @@ public class Sketch extends PApplet {
 
       // Prune health lose
       if(charKeys.get(charKeys.size() - 1) == 'd' && blnAtk){
-        if(((intCharX + 200 >= fltPruneArmyX[i] - 10) && (intCharX + 250 <= fltPruneArmyX[i] + 140)) && intPruneHealth[i] > 0 && (intAtkFrame == 1 || intAtkFrame == 3)){
-          intPruneHealth[i] = intPruneHealth[i] - 10;
-          fltPruneArmyX[i] = fltPruneArmyX[i] + 70;
+        if(((intCharX + 200 >= fltPruneArmyX[i] - 10) && (intCharX + 250 <= fltPruneArmyX[i] + 140)) && intPruneHealth[i] > 0){
+          if(intAtkFrame == 1 || intAtkFrame == 3){
+            intPruneHealth[i] = intPruneHealth[i] - 10;
+            fltPruneArmyX[i] = fltPruneArmyX[i] + 70;
+          }
+
+          if(intAtkFrame == 7){
+            fltPruneArmyX[i] = fltPruneArmyX[i] + 20;
+          }
         }
       }
 
       if(charKeys.get(charKeys.size() - 1) == 'a' && blnAtk){
-        if(((intCharX - 50 >= fltPruneArmyX[i] - 10) && (intCharX <= fltPruneArmyX[i] + 140)) && intPruneHealth[i] > 0 && (intAtkFrame == 1 || intAtkFrame == 3)){
-          intPruneHealth[i] = intPruneHealth[i] - 10;
-          fltPruneArmyX[i] = fltPruneArmyX[i] - 70;
+        if(((intCharX - 50 >= fltPruneArmyX[i] - 10) && (intCharX <= fltPruneArmyX[i] + 140)) && intPruneHealth[i] > 0){
+          if(intAtkFrame == 1 || intAtkFrame == 3){
+            intPruneHealth[i] = intPruneHealth[i] - 10;
+            fltPruneArmyX[i] = fltPruneArmyX[i] - 70;
+          }
+
+          if(intAtkFrame == 7){
+            fltPruneArmyX[i] = fltPruneArmyX[i] - 20;
+          }
         }
       }
 
@@ -1442,16 +1454,28 @@ public class Sketch extends PApplet {
 
       // Jelly health lose
       if(charKeys.get(charKeys.size() - 1) == 'd' && blnAtk){
-        if(((intCharX + 200 >= fltJellyArmyX[i] - 10) && (intCharX + 250 <= fltJellyArmyX[i] + 140)) && intJellyHealth[i] > 0 && (intAtkFrame == 1 || intAtkFrame == 3)){
-          intJellyHealth[i] = intJellyHealth[i] - 10;
-          fltJellyArmyX[i] = fltJellyArmyX[i] + 70;
+        if(((intCharX + 200 >= fltJellyArmyX[i] - 10) && (intCharX + 250 <= fltJellyArmyX[i] + 140)) && intJellyHealth[i] > 0){
+          if(intAtkFrame == 1 || intAtkFrame == 3){
+            intJellyHealth[i] = intJellyHealth[i] - 10;
+            fltJellyArmyX[i] = fltJellyArmyX[i] + 70;
+          }
+
+          if(intAtkFrame == 7){
+            fltJellyArmyX[i] = fltJellyArmyX[i] + 20;
+          }
         }
       }
 
       if(charKeys.get(charKeys.size() - 1) == 'a' && blnAtk){
-        if(((intCharX - 50 >= fltJellyArmyX[i] - 10) && (intCharX <= fltJellyArmyX[i] + 140)) && intJellyHealth[i] > 0 && (intAtkFrame == 1 || intAtkFrame == 3)){
-          intJellyHealth[i] = intJellyHealth[i] - 10;
-          fltJellyArmyX[i] = fltJellyArmyX[i] - 70;
+        if(((intCharX - 50 >= fltJellyArmyX[i] - 10) && (intCharX <= fltJellyArmyX[i] + 140)) && intJellyHealth[i] > 0){
+          if(intAtkFrame == 1 || intAtkFrame == 3){
+            intJellyHealth[i] = intJellyHealth[i] - 10;
+            fltJellyArmyX[i] = fltJellyArmyX[i] - 70;
+          }
+
+          if(intAtkFrame == 7){
+            fltJellyArmyX[i] = fltJellyArmyX[i] - 20;
+          }
         }
       }
 
@@ -1612,16 +1636,36 @@ public class Sketch extends PApplet {
 
     // Prune health lose
     if(charKeys.get(charKeys.size() - 1) == 'd' && blnAtk){
-      if(((intCharX + 200 >= fltTutPruneX - 10) && (intCharX + 250 <= fltTutPruneX + 140)) && intPruneHealth[0] > 0 && (intAtkFrame == 1 || intAtkFrame == 3)){
-        intPruneHealth[0] = intPruneHealth[0] - 10;
-        fltTutPruneX = fltTutPruneX + 70;
+      if(((intCharX + 200 >= fltTutPruneX - 10) && (intCharX + 250 <= fltTutPruneX + 140)) && intPruneHealth[0] > 0){
+        if(intAtkFrame == 1 || intAtkFrame == 3){
+          intPruneHealth[0] = intPruneHealth[0] - 10;
+          fltTutPruneX = fltTutPruneX + 70;
+        }
+
+        if(intAtkFrame == 7){
+          fltTutPruneX = fltTutPruneX + 20;
+        }
       }
     }
 
     if(charKeys.get(charKeys.size() - 1) == 'a' && blnAtk){
-      if(((intCharX - 50 >= fltTutPruneX - 10) && (intCharX <= fltTutPruneX + 140)) && intPruneHealth[0] > 0 && (intAtkFrame == 1 || intAtkFrame == 3)){
-        intPruneHealth[0] = intPruneHealth[0] - 10;
-        fltTutPruneX = fltTutPruneX - 70;
+      if(((intCharX - 50 >= fltTutPruneX - 10) && (intCharX <= fltTutPruneX + 140)) && intPruneHealth[0] > 0){
+        if(intAtkFrame == 1 || intAtkFrame == 3){
+          intPruneHealth[0] = intPruneHealth[0] - 10;
+          fltTutPruneX = fltTutPruneX - 70;
+        }
+        
+        if(intAtkFrame == 7){
+          fltTutPruneX = fltTutPruneX - 20;
+        }
+      }
+    }
+
+    if(intPruneHealth[0] <= 0){
+      blnDrawPrune[0] = false;
+
+      if(millis() - pruneSpawnInterval > pruneSpawnCooldown[0]){
+        intPrunesKilled++;
       }
     }
 
@@ -1651,6 +1695,11 @@ public class Sketch extends PApplet {
     // Spawns prune
     else{
       blnDrawPrune[0] = true;
+
+      if(intPrunesKilled == 1){
+        fltTutPruneX = -1000;
+        intPruneSpeed[0] = 0;
+      }
     }
 
     // Keeps prune in bounds and hones the player
@@ -1702,16 +1751,36 @@ public class Sketch extends PApplet {
 
     // Jelly health lose
     if(charKeys.get(charKeys.size() - 1) == 'd' && blnAtk){
-      if(((intCharX + 200 >= fltTutJellyX - 10) && (intCharX + 250 <= fltTutJellyX + 140)) && intJellyHealth[0] > 0 && (intAtkFrame == 1 || intAtkFrame == 3)){
-        intJellyHealth[0] = intJellyHealth[0] - 10;
-        fltTutJellyX = fltTutJellyX + 70;
+      if(((intCharX + 200 >= fltTutJellyX - 10) && (intCharX + 250 <= fltTutJellyX + 140)) && intJellyHealth[0] > 0){
+        if(intAtkFrame == 1 || intAtkFrame == 3){
+          intJellyHealth[0] = intJellyHealth[0] - 10;
+          fltTutJellyX = fltTutJellyX + 70;
+        }
+
+        if(intAtkFrame == 7){
+          fltTutJellyX = fltTutJellyX + 20;
+        }
       }
     }
 
     if(charKeys.get(charKeys.size() - 1) == 'a' && blnAtk){
-      if(((intCharX - 50 >= fltTutJellyX - 10) && (intCharX <= fltTutJellyX + 140)) && intJellyHealth[0] > 0 && (intAtkFrame == 1 || intAtkFrame == 3)){
-        intJellyHealth[0] = intJellyHealth[0] - 10;
-        fltTutJellyX = fltTutJellyX - 70;
+      if(((intCharX - 50 >= fltTutJellyX - 10) && (intCharX <= fltTutJellyX + 140)) && intJellyHealth[0] > 0){
+        if(intAtkFrame == 1 || intAtkFrame == 3){
+          intJellyHealth[0] = intJellyHealth[0] - 10;
+          fltTutJellyX = fltTutJellyX - 70;
+        }
+
+        if(intAtkFrame == 7){
+          fltTutJellyX = fltTutJellyX - 20;
+        }
+      }
+    }
+
+    if(intJellyHealth[0] <= 0){
+      blnDrawJelly[0] = false;
+
+      if(millis() - jellySpawnInterval > jellySpawnCooldown[0]){
+        intJelliesKilled++;
       }
     }
 
@@ -1743,6 +1812,11 @@ public class Sketch extends PApplet {
     // Spawns jelly 
     else{
       blnDrawJelly[0] = true;
+
+      if(intJelliesKilled == 1){
+        fltTutJellyX = -1000;
+        intJellySpeed[0] = 0;
+      }
     }
 
     // Keeps jelly in bounds and hones the player
