@@ -1399,7 +1399,6 @@ public class Sketch extends PApplet {
 
         if(intPrunesKilled >= 7){
           fltPruneArmyX[i] = -1000;
-          intPruneSpeed[i] = 0;
         }
       }
 
@@ -1522,7 +1521,6 @@ public class Sketch extends PApplet {
 
         if(intJelliesKilled >= 12){
           fltJellyArmyX[i] = -1000;
-          intJellySpeed[i] = 0;
         }
       }
 
@@ -1698,7 +1696,6 @@ public class Sketch extends PApplet {
 
       if(intPrunesKilled == 1){
         fltTutPruneX = -1000;
-        intPruneSpeed[0] = 0;
       }
     }
 
@@ -1815,7 +1812,6 @@ public class Sketch extends PApplet {
 
       if(intJelliesKilled == 1){
         fltTutJellyX = -1000;
-        intJellySpeed[0] = 0;
       }
     }
 
