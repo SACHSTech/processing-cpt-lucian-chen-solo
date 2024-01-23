@@ -567,13 +567,13 @@ public class Sketch extends PApplet {
    * @author: L. Chen
    */
   public void keyPressed(){
-    if(key == 'a'){
+    if(key == 'a' || key == 'A'){
       blnLeft = true;
       blnAtk = false;
       blnJump = false;
     }
 
-    if(key == 'd'){
+    if(key == 'd' || key == 'D'){
       blnRight = true;
       blnAtk = false;
       blnJump = false;
@@ -585,7 +585,7 @@ public class Sketch extends PApplet {
     }
 
     // Return to menu
-    if((intLvl == 2 || intLvl == 3) && key == 'x'){
+    if((intLvl == 2 || intLvl == 3) && (key == 'x' || key == 'X')){
       intLvl = 0;
       reset(); 
 
@@ -594,7 +594,7 @@ public class Sketch extends PApplet {
     }
 
     // Pause
-    if(intLvl == 1 && key == 'x'){
+    if(intLvl == 1 && (key == 'x' || key == 'X')){
       intLvl = 4;
       intClickX.add(0);
       intClickY.add(0);
@@ -623,12 +623,12 @@ public class Sketch extends PApplet {
    * @author: L. Chen
    */
   public void keyReleased(){
-    if(key == 'a'){
+    if(key == 'a' || key == 'A'){
       blnLeft = false;
       blnAtk = false;
     }
 
-    if(key == 'd'){
+    if(key == 'd' || key == 'D'){
       blnRight = false;
       blnAtk = false;
     }
@@ -769,7 +769,7 @@ public class Sketch extends PApplet {
     }
 
     else if(blnJump){
-      if(charKeys.get(charKeys.size() - 1) == 'd'){
+      if(charKeys.get(charKeys.size() - 1) == 'd' || charKeys.get(charKeys.size() - 1) == 'D'){
         image(imgScytheRestRight, intCharX - 80, intCharY);
         image(imgStandRight, intCharX, intCharY);
 
@@ -780,7 +780,7 @@ public class Sketch extends PApplet {
         intCharY += fltCharJumpY;
       }
 
-      else if(charKeys.get(charKeys.size() - 1) == 'a'){
+      else if(charKeys.get(charKeys.size() - 1) == 'a' || charKeys.get(charKeys.size() - 1) == 'A'){
         image(imgScytheRestLeft, intCharX + 80, intCharY);
         image(imgStandLeft, intCharX, intCharY);
 
@@ -793,6 +793,7 @@ public class Sketch extends PApplet {
 
       fltAngle += 1;
       blnAtk = false;
+      intAtkFrame = 0;
 
       // Resets jump
       if(fltAngle > 11){
@@ -815,7 +816,7 @@ public class Sketch extends PApplet {
       fltAngle = 0;
       blnJump = false;
 
-      if(charKeys.get(charKeys.size() - 1) == 'd'){
+      if(charKeys.get(charKeys.size() - 1) == 'd' || charKeys.get(charKeys.size() - 1) == 'D'){
         if(!blnAtk){
           image(imgScytheRestRight, intCharX - 80, intCharY);
         }
@@ -823,7 +824,7 @@ public class Sketch extends PApplet {
         image(imgStandRight, intCharX, intCharY); 
       }
       
-      else if(charKeys.get(charKeys.size() - 1) == 'a'){
+      else if(charKeys.get(charKeys.size() - 1) == 'a' || charKeys.get(charKeys.size() - 1) == 'A'){
         if(!blnAtk){
           image(imgScytheRestLeft, intCharX + 80, intCharY);
         }
@@ -854,7 +855,7 @@ public class Sketch extends PApplet {
     
     // Attack animation
     if(blnAtk){
-      if(charKeys.get(charKeys.size() - 1) == 'd'){
+      if(charKeys.get(charKeys.size() - 1) == 'd' || charKeys.get(charKeys.size() - 1) == 'D'){
         intAtkFrame++;
         intAtkFrame %= imgRightAttack.length;
         image(imgRightAttack[intAtkFrame], intCharX - 10, intCharY - 30);
@@ -864,7 +865,7 @@ public class Sketch extends PApplet {
         }
       }
 
-      else if(charKeys.get(charKeys.size() - 1) == 'a'){
+      else if(charKeys.get(charKeys.size() - 1) == 'a' || charKeys.get(charKeys.size() - 1) == 'A'){
         intAtkFrame++;
         intAtkFrame %= imgLeftAttack.length;
         image(imgLeftAttack[intAtkFrame], intCharX - 90, intCharY - 30);
@@ -924,7 +925,7 @@ public class Sketch extends PApplet {
     }
 
     else if(blnJump){
-      if(charKeys.get(charKeys.size() - 1) == 'd'){
+      if(charKeys.get(charKeys.size() - 1) == 'd' || charKeys.get(charKeys.size() - 1) == 'D'){
         image(imgScytheRestRight, intCharX - 80, intCharY);
         image(imgStandRight, intCharX, intCharY);
 
@@ -935,7 +936,7 @@ public class Sketch extends PApplet {
         intCharY += fltCharJumpY;
       }
 
-      else if(charKeys.get(charKeys.size() - 1) == 'a'){
+      else if(charKeys.get(charKeys.size() - 1) == 'a' || charKeys.get(charKeys.size() - 1) == 'A'){
         image(imgScytheRestLeft, intCharX + 80, intCharY);
         image(imgStandLeft, intCharX, intCharY);
 
@@ -948,6 +949,7 @@ public class Sketch extends PApplet {
 
       fltAngle += 1;
       blnAtk = false;
+      intAtkFrame = 0;
 
       // Resets jump
       if(fltAngle > 11){
@@ -970,7 +972,7 @@ public class Sketch extends PApplet {
       fltAngle = 0;
       blnJump = false;
 
-      if(charKeys.get(charKeys.size() - 1) == 'd'){
+      if(charKeys.get(charKeys.size() - 1) == 'd' || charKeys.get(charKeys.size() - 1) == 'D'){
         if(!blnAtk){
           image(imgScytheRestRight, intCharX - 80, intCharY);
         }
@@ -978,7 +980,7 @@ public class Sketch extends PApplet {
         image(imgStandRight, intCharX, intCharY); 
       }
       
-      else if(charKeys.get(charKeys.size() - 1) == 'a'){
+      else if(charKeys.get(charKeys.size() - 1) == 'a' || charKeys.get(charKeys.size() - 1) == 'A'){
         if(!blnAtk){
           image(imgScytheRestLeft, intCharX + 80, intCharY);
         }
@@ -989,7 +991,7 @@ public class Sketch extends PApplet {
     
     // Attack animation
     if(blnAtk){
-      if(charKeys.get(charKeys.size() - 1) == 'd'){
+      if(charKeys.get(charKeys.size() - 1) == 'd' || charKeys.get(charKeys.size() - 1) == 'D'){
         intAtkFrame++;
         intAtkFrame %= imgRightAttack.length;
         image(imgRightAttack[intAtkFrame], intCharX - 10, intCharY - 30);
@@ -999,7 +1001,7 @@ public class Sketch extends PApplet {
         }
       }
 
-      else if(charKeys.get(charKeys.size() - 1) == 'a'){
+      else if(charKeys.get(charKeys.size() - 1) == 'a' || charKeys.get(charKeys.size() - 1) == 'A'){
         intAtkFrame++;
         intAtkFrame %= imgLeftAttack.length;
         image(imgLeftAttack[intAtkFrame], intCharX - 90, intCharY - 30);
@@ -1328,7 +1330,7 @@ public class Sketch extends PApplet {
       rect(fltPruneArmyX[i] + 15, fltPruneArmyY[i], 1 * intPruneHealth[i], 25);
 
       // Prune health lose
-      if(charKeys.get(charKeys.size() - 1) == 'd' && blnAtk){
+      if((charKeys.get(charKeys.size() - 1) == 'd' || charKeys.get(charKeys.size() - 1) == 'D') && blnAtk){
         if(((intCharX + 200 >= fltPruneArmyX[i] - 10) && (intCharX + 250 <= fltPruneArmyX[i] + 140)) && intPruneHealth[i] > 0){
           if(intAtkFrame == 1 || intAtkFrame == 3){
             intPruneHealth[i] = intPruneHealth[i] - 10;
@@ -1344,7 +1346,7 @@ public class Sketch extends PApplet {
         }
       }
 
-      if(charKeys.get(charKeys.size() - 1) == 'a' && blnAtk){
+      if((charKeys.get(charKeys.size() - 1) == 'a' || charKeys.get(charKeys.size() - 1) == 'A') && blnAtk){
         if(((intCharX - 50 >= fltPruneArmyX[i] - 10) && (intCharX <= fltPruneArmyX[i] + 140)) && intPruneHealth[i] > 0){
           if(intAtkFrame == 1 || intAtkFrame == 3){
             intPruneHealth[i] = intPruneHealth[i] - 10;
@@ -1458,7 +1460,7 @@ public class Sketch extends PApplet {
       rect(fltJellyArmyX[i] + 25, fltJellyArmyY[i], 1 * intJellyHealth[i], 25);
 
       // Jelly health lose
-      if(charKeys.get(charKeys.size() - 1) == 'd' && blnAtk){
+      if((charKeys.get(charKeys.size() - 1) == 'd' || charKeys.get(charKeys.size() - 1) == 'D') && blnAtk){
         if(((intCharX + 200 >= fltJellyArmyX[i] - 10) && (intCharX + 250 <= fltJellyArmyX[i] + 140)) && intJellyHealth[i] > 0){
           if(intAtkFrame == 1 || intAtkFrame == 3){
             intJellyHealth[i] = intJellyHealth[i] - 10;
@@ -1474,7 +1476,7 @@ public class Sketch extends PApplet {
         }
       }
 
-      if(charKeys.get(charKeys.size() - 1) == 'a' && blnAtk){
+      if((charKeys.get(charKeys.size() - 1) == 'a' || charKeys.get(charKeys.size() - 1) == 'A') && blnAtk){
         if(((intCharX - 50 >= fltJellyArmyX[i] - 10) && (intCharX <= fltJellyArmyX[i] + 140)) && intJellyHealth[i] > 0){
           if(intAtkFrame == 1 || intAtkFrame == 3){
             intJellyHealth[i] = intJellyHealth[i] - 10;
@@ -1645,7 +1647,7 @@ public class Sketch extends PApplet {
     rect(fltTutPruneX + 15, fltPruneArmyY[0], 1 * intPruneHealth[0], 25);
 
     // Prune health lose
-    if(charKeys.get(charKeys.size() - 1) == 'd' && blnAtk){
+    if((charKeys.get(charKeys.size() - 1) == 'd' || charKeys.get(charKeys.size() - 1) == 'D') && blnAtk){
       if(((intCharX + 200 >= fltTutPruneX - 10) && (intCharX + 250 <= fltTutPruneX + 140)) && intPruneHealth[0] > 0){
         if(intAtkFrame == 1 || intAtkFrame == 3){
           intPruneHealth[0] = intPruneHealth[0] - 10;
@@ -1661,7 +1663,7 @@ public class Sketch extends PApplet {
       }
     }
 
-    if(charKeys.get(charKeys.size() - 1) == 'a' && blnAtk){
+    if((charKeys.get(charKeys.size() - 1) == 'a' || charKeys.get(charKeys.size() - 1) == 'A') && blnAtk){
       if(((intCharX - 50 >= fltTutPruneX - 10) && (intCharX <= fltTutPruneX + 140)) && intPruneHealth[0] > 0){
         if(intAtkFrame == 1 || intAtkFrame == 3){
           intPruneHealth[0] = intPruneHealth[0] - 10;
