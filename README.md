@@ -6,7 +6,7 @@ Forest is a simple one-player game where it tests how good you are at dodging. T
 
 There is also a tutorial level and a gallery included on the title screen. The tutorial provides players with a simplified version of the full game. They can physically try out the mechanics instead of just reading instructions. The gallery is navigated using the left and right arrow keys, and shows the design process the game took. Players can easily return to the title screen by choosing the ‘menu’ option when they pause, or when they lose or win. 
 
-The player moves using the A and D keys, moving left and right respectively. Space can also be used to jump and you attack by left-clicking (or just clicking in general). Enemies will continually move towards the player with a honing mechanic. 
+The player moves using the A and D keys, moving left and right respectively. Space is used to jump and you attack by left-clicking (or just clicking in general). Please make sure you let go of A and D before you jump or attack. Jump and attack will also be canceled when you move. Enemies will continually move towards the player with a honing mechanic. 
 
 The game has no time limit or scoring system so the only thing you can show off is the number of lives you have left. 
 
