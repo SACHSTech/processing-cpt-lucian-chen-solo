@@ -1332,6 +1332,9 @@ public class Sketch extends PApplet {
         if(((intCharX + 200 >= fltPruneArmyX[i] - 10) && (intCharX + 250 <= fltPruneArmyX[i] + 140)) && intPruneHealth[i] > 0){
           if(intAtkFrame == 1 || intAtkFrame == 3){
             intPruneHealth[i] = intPruneHealth[i] - 10;
+          }
+
+          if(intAtkFrame == 2){
             fltPruneArmyX[i] = fltPruneArmyX[i] + 70;
           }
 
@@ -1345,6 +1348,9 @@ public class Sketch extends PApplet {
         if(((intCharX - 50 >= fltPruneArmyX[i] - 10) && (intCharX <= fltPruneArmyX[i] + 140)) && intPruneHealth[i] > 0){
           if(intAtkFrame == 1 || intAtkFrame == 3){
             intPruneHealth[i] = intPruneHealth[i] - 10;
+          }
+
+          if(intAtkFrame == 2){
             fltPruneArmyX[i] = fltPruneArmyX[i] - 70;
           }
 
@@ -1456,6 +1462,9 @@ public class Sketch extends PApplet {
         if(((intCharX + 200 >= fltJellyArmyX[i] - 10) && (intCharX + 250 <= fltJellyArmyX[i] + 140)) && intJellyHealth[i] > 0){
           if(intAtkFrame == 1 || intAtkFrame == 3){
             intJellyHealth[i] = intJellyHealth[i] - 10;
+          }
+
+          if(intAtkFrame == 2){
             fltJellyArmyX[i] = fltJellyArmyX[i] + 70;
           }
 
@@ -1469,6 +1478,9 @@ public class Sketch extends PApplet {
         if(((intCharX - 50 >= fltJellyArmyX[i] - 10) && (intCharX <= fltJellyArmyX[i] + 140)) && intJellyHealth[i] > 0){
           if(intAtkFrame == 1 || intAtkFrame == 3){
             intJellyHealth[i] = intJellyHealth[i] - 10;
+          }
+
+          if(intAtkFrame == 2){
             fltJellyArmyX[i] = fltJellyArmyX[i] - 70;
           }
 
@@ -1637,6 +1649,9 @@ public class Sketch extends PApplet {
       if(((intCharX + 200 >= fltTutPruneX - 10) && (intCharX + 250 <= fltTutPruneX + 140)) && intPruneHealth[0] > 0){
         if(intAtkFrame == 1 || intAtkFrame == 3){
           intPruneHealth[0] = intPruneHealth[0] - 10;
+        }
+
+        if(intAtkFrame == 2){
           fltTutPruneX = fltTutPruneX + 70;
         }
 
@@ -1650,6 +1665,9 @@ public class Sketch extends PApplet {
       if(((intCharX - 50 >= fltTutPruneX - 10) && (intCharX <= fltTutPruneX + 140)) && intPruneHealth[0] > 0){
         if(intAtkFrame == 1 || intAtkFrame == 3){
           intPruneHealth[0] = intPruneHealth[0] - 10;
+        }
+
+        if(intAtkFrame == 2){
           fltTutPruneX = fltTutPruneX - 70;
         }
         
@@ -1751,6 +1769,9 @@ public class Sketch extends PApplet {
       if(((intCharX + 200 >= fltTutJellyX - 10) && (intCharX + 250 <= fltTutJellyX + 140)) && intJellyHealth[0] > 0){
         if(intAtkFrame == 1 || intAtkFrame == 3){
           intJellyHealth[0] = intJellyHealth[0] - 10;
+        }
+
+        if(intAtkFrame == 2){
           fltTutJellyX = fltTutJellyX + 70;
         }
 
@@ -1764,6 +1785,9 @@ public class Sketch extends PApplet {
       if(((intCharX - 50 >= fltTutJellyX - 10) && (intCharX <= fltTutJellyX + 140)) && intJellyHealth[0] > 0){
         if(intAtkFrame == 1 || intAtkFrame == 3){
           intJellyHealth[0] = intJellyHealth[0] - 10;
+        }
+
+        if(intAtkFrame == 2){
           fltTutJellyX = fltTutJellyX - 70;
         }
 
